@@ -1,0 +1,57 @@
+#!/bin/sh
+# Start/stop/restart distccd
+
+LOGFILE=/var/log/distccd
+PIDFILE=/var/run/distccd.pid
+
+# Start distccd:
+distccd_start() {
+  if [ -x /usr/bin/distccd ]; then
+    echo "Starting distcc daemon:  /usr/bin/distccd"
+    if [ -f $LOGFILE ]; then
+      mv $LOGFILE $LOGFILE.1
+    fi
+    touch $LOGFILE $PIDFILE
+    chown nobody:nogroup $LOGFILE $PIDFILE
+
+    /usr/bin/distccd \
+      --verbose \
+      --log-file $LOGFILE \
+      --log-level notice \
+      --jobs 16 \
+      --daemon \
+      --user nobody \
+      --pid-file $PIDFILE \
+      $(sed -e 's/#.*//' -e 's/^/--allow /' /etc/distcc/clients.allow | grep -v '^--allow[[:space:]]*$' )
+  fi
+}
+
+# Stop distccd:
+distccd_stop() {
+  if [ -r $PIDFILE ]; then
+    kill $(cat $PIDFILE)
+  else
+    killall distccd
+  fi
+}
+
+# Restart distccd:
+distccd_restart() {
+  distccd_stop
+  sleep 1
+  distccd_start
+}
+
+case "$1" in
+'start')
+  distccd_start
+  ;;
+'stop')
+  distccd_stop
+  ;;
+'restart')
+  distccd_restart
+  ;;
+*)
+  echo "usage $0 start|stop|restart"
+esac
