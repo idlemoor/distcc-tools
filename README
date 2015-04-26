@@ -1,0 +1,23 @@
+Here you will find the following SlackBuilds:
+
+distcc-client:
+
+This is a 'masquerade' mode distcc client for both gcc/g++ and clang/clang++.
+
+distcc-server:
+
+This is a 'masquerade' mode distcc server.  On x86_64, it is a full multiarch
+cross-compiling server -- it can build for i486 and x86_64, and for arm if the
+arm-x-toolchain package is installed.
+
+arm-x-toolchain:
+
+This is Stuart Winter's x-toolchain (from the Slackware ARM devtools) packaged
+to work with distcc-client and distcc-server.
+
+References:
+
+For a full description of distcc 'masquerade' mode, see
+  http://distcc.googlecode.com/svn/trunk/doc/web/man/distcc_1.html#TOC_13
+See also
+  ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
