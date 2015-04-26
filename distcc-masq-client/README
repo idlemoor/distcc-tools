@@ -1,0 +1,17 @@
+This is a 'masquerade' mode distcc client for both gcc/g++ and clang/clang++.
+
+After installation, please configure your client by editing the file
+/etc/distcc/hosts -- you should change '127.0.0.1' to the distcc host
+specification that you require.  Alternatively, you can override this on
+a per-user basis by setting DISTCC_HOSTS in the user's profile, for example
+
+  export DISTCC_HOSTS="bighost/4 tinyhost"
+
+For details of the format of /etc/distcc/hosts and DISTCC_HOSTS, see
+'man distcc', section 'HOST SPECIFICATIONS'.
+
+To disable distcc within a process, you can unset the DISTCC_HOSTS environment
+variable.
+
+For a full description of 'masquerade' mode, see
+  http://distcc.googlecode.com/svn/trunk/doc/web/man/distcc_1.html#TOC_13
