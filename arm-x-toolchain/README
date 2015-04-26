@@ -1,0 +1,18 @@
+This SlackBuild packages Stuart Winter's x-toolchain (from the Slackware ARM
+devtools).  It is intended to be installed on a distcc server, and called from
+a Slackware ARM client using masquerade mode.  The distcc server should be
+running either Slackware64 (x86_64) or Slackware (i486).
+
+The accompanying distcc-masq-client and distcc-masq-server SlackBuilds will
+help you setup your client and your server.
+
+If you are running slackwarearm-current on your ARM client, please see the
+accompanying file 'README.versions'.
+
+
+References
+----------
+
+ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
+ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/
+https://github.com/idlemoor/distcc-tools

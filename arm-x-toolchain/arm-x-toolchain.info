@@ -1,0 +1,14 @@
+PRGNAM="arm-x-toolchain"
+VERSION="14.1"
+HOMEPAGE="https://github.com/idlemoor/distcc-tools"
+DOWNLOAD="http://slackware.org.uk/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/x-toolchain-slk-14.1.tar.xz \
+          https://sourceforge.net/projects/slackbuildsdirectlinks/files/arm-x-toolchain/gcc-4.8.4.tar.xz \
+          http://slackware.org.uk/slackwarearm/slackwarearm-14.1/patches/source/gcc/sources/patches-gcc-4.8_4.8.4-1.tar.xz"
+MD5SUM="d85a636fca01459ee5a34c23d7ac96a6 \
+        2ce0bc44964a7a5896164581d03bdc45 \
+        806bb4ed766603e02789bb608d1f38a2"
+DOWNLOAD_x86_64=""
+MD5SUM_x86_64=""
+REQUIRES=""
+MAINTAINER="David Spencer"
+EMAIL="baildon.research@googlemail.com"
