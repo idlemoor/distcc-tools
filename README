@@ -1,10 +1,10 @@
 Here you will find the following SlackBuilds:
 
-distcc-client:
+distcc-masq-client:
 
 This is a 'masquerade' mode distcc client for both gcc/g++ and clang/clang++.
 
-distcc-server:
+distcc-masq-server:
 
 This is a 'masquerade' mode distcc server.  On x86_64, it is a full multiarch
 cross-compiling server -- it can build for i486 and x86_64, and for arm if the
