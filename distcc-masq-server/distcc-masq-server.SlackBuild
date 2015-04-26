@@ -56,8 +56,8 @@ case $VERSION in
 esac
 
 if [ "$ARCH" = 'x86_64' ]; then
-  mkdir -p $PKG/usr/bin
 
+  mkdir -p $PKG/usr/bin
   for CC in gcc gcc-$GCCVERSION ; do
     cat <<++++ > $PKG/usr/bin/i486-slackware-linux-$CC
 #!/bin/sh
@@ -72,6 +72,14 @@ exec x86_64-slackware-linux-g++ -m32 "\$@"
 ++++
     chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CXX
   done
+
+  # Provide stubs-32.h -- clang needs this to cross-compile arm & i486
+  # (note, this file is also provided by the multilib glibc package)
+  mkdir -p $PKG/usr/include/gnu/
+  cp -a \
+    $CWD/stubs-32.h \
+    $PKG/usr/include/gnu/
+
 fi
 
 if [ "${ARMX:-no}" = "yes" ]; then
