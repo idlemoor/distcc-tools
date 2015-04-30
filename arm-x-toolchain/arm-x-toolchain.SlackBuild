@@ -63,7 +63,10 @@ if [ -f $CWD/$TARNAM-$VERSION.tar.xz ]; then
     patch -p1 < $CWD/x-build-gcc-4.8.4.diff
   fi
 elif [ -d $CWD/x-toolchain ]; then
+  VERSION="current"
   EXTRAVERSION="_$(date -r $CWD/x-toolchain/x-build '+%Y%m%d')"
+  rm -rf $TMP/x-toolchain
+  cp -a $CWD/x-toolchain $TMP/
 else
   echo "Source archive '$CWD/$TARNAM-$VERSION.tar.xz' not found." >&2
   exit 1
