@@ -60,15 +60,23 @@ if [ "$ARCH" = 'x86_64' ]; then
   mkdir -p $PKG/usr/bin
   for CC in gcc gcc-$GCCVERSION ; do
     cat <<++++ > $PKG/usr/bin/i486-slackware-linux-$CC
-#!/bin/sh
-exec x86_64-slackware-linux-gcc -m32 "\$@"
+#!/bin/bash
+declare -a arglist
+for arg in "\$@"; do
+  [ "$arg" != '-m64' ] && arglist+=( "$arg" )
+done
+exec x86_64-slackware-linux-gcc -m32 "\${arglist[@]}"
 ++++
     chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CC
   done
   for CXX in c++ g++ ; do
     cat <<++++ > $PKG/usr/bin/i486-slackware-linux-$CXX
-#!/bin/sh
-exec x86_64-slackware-linux-g++ -m32 "\$@"
+#!/bin/bash
+declare -a arglist
+for arg in "\$@"; do
+  [ "$arg" != '-m64' ] && arglist+=( "$arg" )
+done
+exec x86_64-slackware-linux-g++ -m32 "\${arglist[@]}"
 ++++
     chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CXX
   done
