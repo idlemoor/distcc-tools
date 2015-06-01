@@ -64,7 +64,7 @@ for compiler in \
 ; do
   cat <<++++ > $PKG/$MASQDIR/$compiler
 #!/bin/sh
-[ -z "$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-gcc "\$@"
+[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-gcc "\$@"
 exec /usr/bin/distcc /usr/bin/$ARCH-slackware-linux$SLKABI-gcc "\$@"
 ++++
   chmod ugo+x $PKG/$MASQDIR/$compiler
@@ -77,7 +77,7 @@ for compiler in \
 ; do
   cat <<++++ > $PKG/$MASQDIR/$compiler
 #!/bin/sh
-[ -z "$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-g++ "\$@"
+[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-g++ "\$@"
 exec /usr/bin/distcc /usr/bin/$ARCH-slackware-linux$SLKABI-g++ "\$@"
 ++++
   chmod ugo+x $PKG/$MASQDIR/$compiler
@@ -89,7 +89,7 @@ for compiler in \
 ; do
   cat <<++++ > $PKG/$MASQDIR/$compiler
 #!/bin/sh
-[ -z "$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI "\$@"
+[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI "\$@"
 exec /usr/bin/distcc /usr/bin/$compiler -integrated-as -target $ARCH-slackware-linux$SLKABI "\$@"
 ++++
   chmod ugo+x $PKG/$MASQDIR/$compiler
