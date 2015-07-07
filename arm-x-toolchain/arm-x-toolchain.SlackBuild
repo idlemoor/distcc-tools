@@ -87,7 +87,7 @@ sed -i \
 
 sh ./x-build
 
-GCCVERSION=$(ls ${PKG}${INSTLOC}/arm-slackware-linux-gnueabi-gcc-* | sed 's/.*-//')
+GCCVERSION=$(ls ${PKG}${INSTLOC}/bin/arm-slackware-linux-gnueabi-gcc-* | sed 's/.*-//')
 
 mkdir -p $PKG/usr/bin
 for CC in gcc gcc-$GCCVERSION ; do

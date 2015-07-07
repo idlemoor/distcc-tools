@@ -8,9 +8,9 @@
                |-----handy-ruler------------------------------------------------------|
 arm-x-toolchain: arm-x-toolchain (gcc and g++ cross compiler for Slackware ARM)
 arm-x-toolchain:
-arm-x-toolchain: This SlackBuild packages Stuart Winter's x-toolchain (from the
-arm-x-toolchain: Slackware ARM devtools).  It is intended to be installed on a distcc
-arm-x-toolchain: server, and called from a Slackware ARM client using masquerade mode.
+arm-x-toolchain: This is Stuart Winter's x-toolchain from the Slackware ARM devtools.
+arm-x-toolchain: It is intended to be installed on a distcc server, and called from a
+arm-x-toolchain: Slackware ARM distcc 'masquerade mode' client.
 arm-x-toolchain:
 arm-x-toolchain: https://github.com/idlemoor/distcc-tools
 arm-x-toolchain:
