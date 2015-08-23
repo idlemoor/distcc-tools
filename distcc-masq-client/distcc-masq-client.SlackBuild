@@ -108,7 +108,7 @@ for compiler in \
 ; do
   cat <<++++ > $PKG/$MASQDIR/$compiler
 #!/bin/sh
-[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI "\$@"
+[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$compiler -integrated-as -target $ARCH-slackware-linux$SLKABI "\$@"
 exec /usr/bin/distcc /usr/bin/$compiler -integrated-as -target $ARCH-slackware-linux$SLKABI "\$@"
 ++++
   chmod ugo+x $PKG/$MASQDIR/$compiler
