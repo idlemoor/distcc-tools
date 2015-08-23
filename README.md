@@ -17,7 +17,7 @@ Or you can configure distcc for a particular user by setting the DISTCC_HOSTS
 environment variable in the user's profile, for example
 
 ```
-  export DISTCC_HOSTS="bighost/4 tinyhost"
+export DISTCC_HOSTS="bighost/4 tinyhost"
 ```
 
 For details of the format of /etc/distcc/hosts and the DISTCC_HOSTS
@@ -36,22 +36,25 @@ To start the distccd daemon automatically on boot, you must add these lines in
 /etc/rc.d/rc.local:
 
 ```
-  if [ -x /etc/rc.d/rc.distccd ]; then
-    /etc/rc.d/rc.distccd start
-  fi
+if [ -x /etc/rc.d/rc.distccd ]; then
+  /etc/rc.d/rc.distccd start
+fi
 ```
+
+### Cross compilation
 
 On x86_64 only, the server supports full multiarch cross compilation -- it can
 build for i486 and x86_64, and for arm if the arm-x-toolchain package is
 installed.  Only one running instance of distccd is required.
 
-To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
+* To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
 Slackware clients (i486 etc), you don't need to do anything.  Slackware's
 64 bit gcc packages already support 32 bit cross-compilation :-)
 
-To cross-compile for Slackware ARM clients, you need to specify the option
+* To cross-compile for Slackware ARM clients, you need to specify the option
 'ARMX=yes' and install the arm-x-toolchain package (gfortran not supported).
 
+* Other configurations are not supported.
 
 ## arm-x-toolchain
 
@@ -73,13 +76,13 @@ client system's gcc packages are updated. You must use rsync to download
 the latest version of x-toolchain to the SlackBuild's directory:
 
 ```
-  rsync -Pva --delete \
-    rsync://rsync.slackware.org.uk/slackwarearm/slackwarearm-devtools/x-toolchain/ \
-    ./x-toolchain/
+rsync -Pva --delete \
+  rsync://rsync.slackware.org.uk/slackwarearm/slackwarearm-devtools/x-toolchain/ \
+  ./x-toolchain/
 ```
 
 In this case, the SlackBuild will build a package with a version number of
-'current_<date>'.
+'current_yyyymmdd'.
 
 
 ## Notes
@@ -96,7 +99,7 @@ period" of 60 seconds.  During this time, all compilations will be run on the
 client, and the following message will be displayed:
 
 ```
-  distcc[pid] (dcc_build_somewhere) Warning: failed to distribute, running locally instead
+distcc[pid] (dcc_build_somewhere) Warning: failed to distribute, running locally instead
 ```
 
 This is normal behaviour.  Many packages use ./configure scripts that rely on
@@ -116,18 +119,15 @@ To disable distcc completely, you can block execution of the system-wide
 profile script:
 
 ```
-  chmod ugo-x /etc/profile.d/distcc-masq-client.*
+chmod ugo-x /etc/profile.d/distcc-masq-client.*
 ```
 
 
 ### References
 
 For a full description of 'masquerade mode', see
-  http://distcc.googlecode.com/svn/trunk/doc/web/man/distcc_1.html#TOC_13
+    http://distcc.googlecode.com/svn/trunk/doc/web/man/distcc_1.html#TOC_13
 
 Slackware ARM's x-toolchain is at
-  ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
-  ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/
-
-The distcc-tools homepage is at
-  https://github.com/idlemoor/distcc-tools
+    ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
+    ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/
