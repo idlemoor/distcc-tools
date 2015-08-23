@@ -125,9 +125,8 @@ chmod ugo-x /etc/profile.d/distcc-masq-client.*
 
 ### References
 
-For a full description of 'masquerade mode', see
-    http://distcc.googlecode.com/svn/trunk/doc/web/man/distcc_1.html#TOC_13
+For a full description of 'masquerade mode', see 'man distcc', section
+'MASQUERADING'.
 
-Slackware ARM's x-toolchain is at
-    ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
-    ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/
+Slackware ARM's x-toolchain can be found at
+ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
