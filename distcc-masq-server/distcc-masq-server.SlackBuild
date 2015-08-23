@@ -24,7 +24,7 @@
 
 PRGNAM=distcc-masq-server
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_dbs}
 
 if [ -z "$ARCH" ]; then
@@ -46,7 +46,8 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  current)  GCCVERSION=4.9.2 ;;
+  current)  GCCVERSION=4.9.3 ;;
+  14.2)     GCCVERSION=4.9.3 ;;
   14.1)     GCCVERSION=4.8.2
             ARMGCCVERSION=4.8.4
             ;;
@@ -65,7 +66,7 @@ declare -a arglist
 for arg in "\$@"; do
   [ "\$arg" != '-m64' ] && arglist+=( "\$arg" )
 done
-exec x86_64-slackware-linux-gcc -m32 "\${arglist[@]}"
+exec $ARCH-slackware-linux-gcc -m32 "\${arglist[@]}"
 ++++
     chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CC
   done
@@ -76,7 +77,18 @@ declare -a arglist
 for arg in "\$@"; do
   [ "\$arg" != '-m64' ] && arglist+=( "\$arg" )
 done
-exec x86_64-slackware-linux-g++ -m32 "\${arglist[@]}"
+exec $ARCH-slackware-linux-g++ -m32 "\${arglist[@]}"
+++++
+    chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CXX
+  done
+  for FC in g77 g95 gfortran gfortran-$GCCVERSION ; do
+    cat <<++++ > $PKG/usr/bin/i486-slackware-linux-$CXX
+#!/bin/bash
+declare -a arglist
+for arg in "\$@"; do
+  [ "\$arg" != '-m64' ] && arglist+=( "\$arg" )
+done
+exec $ARCH-slackware-linux-gfortran -m32 "\${arglist[@]}"
 ++++
     chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CXX
   done
