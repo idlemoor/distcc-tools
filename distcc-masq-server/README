@@ -1,24 +1,26 @@
-This is a 'masquerade mode' distcc server.
+This package sets up a 'masquerade mode' distcc server for gcc (including g++,
+objc and gfortran) and clang/clang++.
 
 The server and the clients should all have the same versions of Slackware
 (i.e. all running 14.1, or all running the same revision of -current).
 
-On x86_64 only, the server optionally supports cross compilation (see below).
-Only one running instance of distccd is required.
-
-To have the distccd daemon start automatically on boot, please add the following
-lines to /etc/rc.d/rc.local:
+To start the distccd daemon automatically on boot, you must add these lines in
+/etc/rc.d/rc.local:
 
   if [ -x /etc/rc.d/rc.distccd ]; then
     /etc/rc.d/rc.distccd start
   fi
 
-
-Cross-compiling server running Slackware 64 (x86_64)
-----------------------------------------------------
+On x86_64 only, the server supports full multiarch cross compilation -- it can
+build for i486 and x86_64, and for arm if the arm-x-toolchain package is
+installed.  Only one running instance of distccd is required.
 
 To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
-Slackware clients (i486 etc), you don't need to do anything :-)
+Slackware clients (i486 etc), you don't need to do anything.  Slackware's
+64 bit gcc packages already support 32 bit cross-compilation :-)
 
 To cross-compile for Slackware ARM clients, you need to specify the option
-'ARMX=yes' and install the arm-x-toolchain package.
+'ARMX=yes' and install the arm-x-toolchain package (gfortran not supported).
+
+For more information, please see
+  https://github.com/idlemoor/distcc-tools

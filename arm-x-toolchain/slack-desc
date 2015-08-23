@@ -10,10 +10,10 @@ arm-x-toolchain: arm-x-toolchain (gcc and g++ cross compiler for Slackware ARM)
 arm-x-toolchain:
 arm-x-toolchain: This is Stuart Winter's x-toolchain from the Slackware ARM devtools.
 arm-x-toolchain: It is intended to be installed on a distcc server, and called from a
-arm-x-toolchain: Slackware ARM distcc 'masquerade mode' client.
+arm-x-toolchain: Slackware ARM client using masquerade mode.  The distcc server should
+arm-x-toolchain: be running either Slackware64 (x86_64) or Slackware (i486).
 arm-x-toolchain:
 arm-x-toolchain: https://github.com/idlemoor/distcc-tools
-arm-x-toolchain:
 arm-x-toolchain:
 arm-x-toolchain:
 arm-x-toolchain:

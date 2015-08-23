@@ -6,12 +6,12 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
                   |-----handy-ruler------------------------------------------------------|
-distcc-masq-client: distcc-masq-client (distcc masquerading client)
+distcc-masq-client: distcc-masq-client (distcc 'masquerade mode' client)
 distcc-masq-client:
-distcc-masq-client: Masquerading mode distcc client for both gcc/g++ and clang/clang++.
+distcc-masq-client: This package sets up a 'masquerade mode' distcc client for gcc
+distcc-masq-client: (including g++, objc and gfortran) and clang/clang++.
 distcc-masq-client:
 distcc-masq-client: https://github.com/idlemoor/distcc-tools
-distcc-masq-client:
 distcc-masq-client:
 distcc-masq-client:
 distcc-masq-client:

@@ -8,10 +8,10 @@
                   |-----handy-ruler------------------------------------------------------|
 distcc-masq-server: distcc-masq-server (distcc server)
 distcc-masq-server:
-distcc-masq-server: Simple package for a distcc server running in Masquerading
-distcc-masq-server: mode.
+distcc-masq-server: This package sets up a 'masquerade mode' distcc server.
 distcc-masq-server:
 distcc-masq-server: https://github.com/idlemoor/distcc-tools
+distcc-masq-server:
 distcc-masq-server:
 distcc-masq-server:
 distcc-masq-server:

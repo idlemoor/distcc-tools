@@ -1,18 +1,30 @@
-This SlackBuild packages Stuart Winter's x-toolchain (from the Slackware ARM
-devtools).  It is intended to be installed on a distcc server, and called from
-a Slackware ARM client using masquerade mode.  The distcc server should be
-running either Slackware64 (x86_64) or Slackware (i486).
+This is Stuart Winter's x-toolchain (from the Slackware ARM devtools),
+packaged to work with distcc-masq-client and distcc-masq-server.  It is
+intended to be installed on a distcc server, and called from a Slackware ARM
+client using masquerade mode.  The distcc server should be running either
+Slackware64 (x86_64) or Slackware (i486).
 
-The accompanying distcc-masq-client and distcc-masq-server SlackBuilds will
-help you setup your client and your server.
+If your client system is running Slackware ARM 14.1, you should install
+arm-x-toolchain version 14.1 on your distcc server.  This is the default.
+Your client system should be fully patched -- that is, it should
+have been updated with the packages gcc-4.8.4-arm-1_slack14.1 and
+gcc-g++-4.8.4-arm-1_slack14.1.
 
-If you are running slackwarearm-current on your ARM client, please see the
-accompanying file 'README.versions'.
+If your client system is running Slackware ARM -current, you will need to
+rebuild and reinstall arm-x-toolchain on your distcc server whenever your
+client system's gcc packages are updated. You must use rsync to download
+the latest version of x-toolchain to the SlackBuild's directory:
 
+  rsync -Pva --delete \
+    rsync://rsync.slackware.org.uk/slackwarearm/slackwarearm-devtools/x-toolchain/ \
+    ./x-toolchain/
 
-References
-----------
+In this case, the SlackBuild will build a package with a version number of
+'current_<date>'.
 
-ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
-ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/
-https://github.com/idlemoor/distcc-tools
+Slackware ARM's x-toolchain is at
+  ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
+  ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/
+
+For more information, please see
+  https://github.com/idlemoor/distcc-tools
