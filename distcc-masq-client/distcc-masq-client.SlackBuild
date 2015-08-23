@@ -24,7 +24,7 @@
 
 PRGNAM=distcc-masq-client
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_dbs}
 
 SLKABI=""
@@ -45,7 +45,8 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  current)  GCCVERSION=4.9.2 ;;
+  current)  GCCVERSION=4.9.3 ;;   # no need to do anything for new c89/c99 :-)
+  14.2)     GCCVERSION=4.9.3 ;;
   14.1)     GCCVERSION=4.8.2
             [ "$ARCH" = "arm" ] && GCCVERSION=4.8.4
             ;;
@@ -83,6 +84,24 @@ exec /usr/bin/distcc /usr/bin/$ARCH-slackware-linux$SLKABI-g++ "\$@"
   chmod ugo+x $PKG/$MASQDIR/$compiler
 done
 
+if [ "$ARCH" != 'arm' ]; then
+  # arm-x-toolchain does not include gfortran, but if your distcc server is
+  # native ARM, you are welcome to hack this SlackBuild :-)
+  for compiler in \
+    gfortran-gcc-$GCCVERSION \
+    gfortran \
+    g77 \
+    g95 \
+  ; do
+    cat <<++++ > $PKG/$MASQDIR/$compiler
+  #!/bin/sh
+  [ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-gfortran "\$@"
+  exec /usr/bin/distcc /usr/bin/$ARCH-slackware-linux$SLKABI-gfortran "\$@"
+++++
+    chmod ugo+x $PKG/$MASQDIR/$compiler
+  done
+fi
+
 for compiler in \
   clang \
   clang++ \
@@ -100,6 +119,7 @@ for compiler in \
   $ARCH-slackware-linux$SLKABI-gcc \
   $ARCH-slackware-linux$SLKABI-g++ \
   $ARCH-slackware-linux$SLKABI-c++ \
+  $ARCH-slackware-linux$SLKABI-gfortran \
   $ARCH-slackware-linux$SLKABI-clang \
   $ARCH-slackware-linux$SLKABI-clang++ \
 ; do
