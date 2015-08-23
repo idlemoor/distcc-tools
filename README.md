@@ -41,6 +41,14 @@ if [ -x /etc/rc.d/rc.distccd ]; then
 fi
 ```
 
+You must also edit the file /etc/distcc/clients.allow to add your networks
+and/or hosts that will be allowed to use the server, for example,
+
+````
+127.0.0.1
+192.168.3.0/24
+````
+
 ### Cross compilation
 
 On x86_64 only, the server supports full multiarch cross compilation -- it can

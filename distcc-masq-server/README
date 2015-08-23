@@ -11,16 +11,27 @@ To start the distccd daemon automatically on boot, you must add these lines in
     /etc/rc.d/rc.distccd start
   fi
 
+You must also edit the file /etc/distcc/clients.allow to add your networks
+and/or hosts that will be allowed to use the server, for example,
+
+  127.0.0.1
+  192.168.3.0/24
+
+
+Cross compilation
+
 On x86_64 only, the server supports full multiarch cross compilation -- it can
 build for i486 and x86_64, and for arm if the arm-x-toolchain package is
 installed.  Only one running instance of distccd is required.
 
-To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
+* To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
 Slackware clients (i486 etc), you don't need to do anything.  Slackware's
 64 bit gcc packages already support 32 bit cross-compilation :-)
 
-To cross-compile for Slackware ARM clients, you need to specify the option
+* To cross-compile for Slackware ARM clients, you need to specify the option
 'ARMX=yes' and install the arm-x-toolchain package (gfortran not supported).
+
+* Other configurations are not supported.
 
 For more information, please see
   https://github.com/idlemoor/distcc-tools

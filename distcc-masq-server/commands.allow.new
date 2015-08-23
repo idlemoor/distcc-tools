@@ -1,0 +1,17 @@
+x86_64-slackware-linux-c++
+x86_64-slackware-linux-clang
+x86_64-slackware-linux-clang++
+x86_64-slackware-linux-g++
+x86_64-slackware-linux-gcc
+x86_64-slackware-linux-gcc-4.9.3
+x86_64-slackware-linux-gfortran
+i486-slackware-linux-gnueabi-c++
+i486-slackware-linux-gnueabi-g++
+i486-slackware-linux-gnueabi-gcc
+i486-slackware-linux-gnueabi-gcc-4.9.3
+arm-slackware-linux-gnueabi-c++
+arm-slackware-linux-gnueabi-g++
+arm-slackware-linux-gnueabi-gcc
+arm-slackware-linux-gnueabi-gcc-4.9.3
+clang
+clang++
