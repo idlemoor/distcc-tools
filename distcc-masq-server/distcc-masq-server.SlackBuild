@@ -24,16 +24,14 @@
 
 PRGNAM=distcc-masq-server
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-3}
+BUILD=${BUILD:-4}
 TAG=${TAG:-_dbs}
 
-if [ -z "$ARCH" ]; then
-  case "$( uname -m )" in
-    i?86) ARCH=i486 ;;
-    arm*) ARCH=arm ;;
-       *) ARCH=$( uname -m ) ;;
-  esac
-fi
+case "${ARCH:=$(uname -m)}" in
+  i?86) ARCH=i486 ;;
+  arm*) ARCH=arm ;;
+     *) : ;;
+esac
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
@@ -46,52 +44,31 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  current)  GCCVERSION=4.9.3 ;;
-  14.2)     GCCVERSION=4.9.3 ;;
-  14.1)     GCCVERSION=4.8.2 ; ARMGCCVERSION=4.8.4 ;;
-  14.0)     GCCVERSION=4.7.1 ;;
-  13.37)    GCCVERSION=4.5.2 ;;
+  current)  GCCVERSION=4.9.3 ; ARCH32=i586 ;;
+  14.2)     GCCVERSION=4.9.3 ; ARCH32=i586 ;;
+  14.1)     GCCVERSION=4.8.2 ; ARCH32=i486 ; ARMGCCVERSION=4.8.4 ;;
+  14.0)     GCCVERSION=4.7.1 ; ARCH32=i486 ;;
+  13.37)    GCCVERSION=4.5.2 ; ARCH32=i486 ;;
   *)        echo "Version $VERSION is not supported" >&2; exit 1 ;;
 esac
 
 if [ "$ARCH" = 'x86_64' ]; then
 
+  # These x86 wrappers on x86_64 remove any stray -m64 arguments and redirect
+  # to the x86_64 compiler with -m32. They are not required on other arches.
   mkdir -p $PKG/usr/bin
   for CC in gcc gcc-$GCCVERSION ; do
-    cat <<++++ > $PKG/usr/bin/i486-slackware-linux-$CC
-#!/bin/bash
-declare -a arglist
-for arg in "\$@"; do
-  [ "\$arg" != '-m64' ] && arglist+=( "\$arg" )
-done
-exec $ARCH-slackware-linux-gcc -m32 "\${arglist[@]}"
-++++
-    chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CC
+    cat $CWD/x86-gccwrapper.sh > $PKG/usr/bin/${ARCH32}-slackware-linux-$CC
   done
   for CXX in c++ g++ ; do
-    cat <<++++ > $PKG/usr/bin/i486-slackware-linux-$CXX
-#!/bin/bash
-declare -a arglist
-for arg in "\$@"; do
-  [ "\$arg" != '-m64' ] && arglist+=( "\$arg" )
-done
-exec $ARCH-slackware-linux-g++ -m32 "\${arglist[@]}"
-++++
-    chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CXX
+    cat $CWD/x86-g++wrapper.sh > $PKG/usr/bin/${ARCH32}-slackware-linux-$CXX
   done
   for FC in g77 g95 gfortran gfortran-$GCCVERSION ; do
-    cat <<++++ > $PKG/usr/bin/i486-slackware-linux-$CXX
-#!/bin/bash
-declare -a arglist
-for arg in "\$@"; do
-  [ "\$arg" != '-m64' ] && arglist+=( "\$arg" )
-done
-exec $ARCH-slackware-linux-gfortran -m32 "\${arglist[@]}"
-++++
-    chmod ugo+x $PKG/usr/bin/i486-slackware-linux-$CXX
+    cat $CWD/x86-gfortranwrapper.sh > $PKG/usr/bin/${ARCH32}-slackware-linux-$CXX
   done
+  chmod ugo+x $PKG/usr/bin/*-slackware-linux-*
 
-  # Provide stubs-32.h -- clang needs this to cross-compile arm & i486
+  # Provide stubs-32.h -- clang needs this to cross-compile arm & i?86
   # (note, this file is also provided by the multilib glibc package)
   mkdir -p $PKG/usr/include/gnu/
   cp -a \
@@ -100,37 +77,17 @@ exec $ARCH-slackware-linux-gfortran -m32 "\${arglist[@]}"
 
 fi
 
-if [ "${ARMX:-no}" = "yes" ]; then
-  ARMXTOOLDIR=${ARMXTOOLDIR:-/opt/arm-x-toolchain}
-  [ -z "$ARMGCCVERSION" ] && ARMGCCVERSION=$GCCVERSION
-  mkdir -p $PKG/usr/bin
-  for CC in gcc gcc-$ARMGCCVERSION ; do
-  cat <<++++ > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CC
-#!/bin/sh
-export LD_LIBRARY_PATH=$ARMXTOOLDIR/$ARCH-slackware-linux/arm-slackware-linux-gnueabi/lib
-exec $ARMXTOOLDIR/bin/arm-slackware-linux-gnueabi-gcc "\$@"
-++++
-    chmod ugo+x $PKG/usr/bin/arm-slackware-linux-gnueabi-$CC
-  done
-  for CXX in c++ g++ ; do
-  cat <<++++ > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CXX
-#!/bin/sh
-export LD_LIBRARY_PATH=$ARMXTOOLDIR/$ARCH-slackware-linux/arm-slackware-linux-gnueabi/lib
-exec $ARMXTOOLDIR/bin/arm-slackware-linux-gnueabi-g++ "\$@"
-++++
-    chmod ugo+x $PKG/usr/bin/arm-slackware-linux-gnueabi-$CXX
-  done
-fi
-
 mkdir -p $PKG/etc/rc.d
 cp -a \
   $CWD/rc.distccd.new \
   $PKG/etc/rc.d
 
 mkdir -p $PKG/etc/distcc
-cp -a \
-  $CWD/commands.allow.new \
-  $PKG/etc/distcc
+sed \
+  -e "s/%ARCH32%/$ARCH32/g" \
+  -e "s/%GCCVERSION%/$GCCVERSION/g" \
+  -e "s/%ARMGCCVERSION%/$ARMGCCVERSION/g" \
+  < $CWD/commands.allow.new > $PKG/etc/distcc/commands.allow.new
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \

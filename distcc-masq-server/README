@@ -21,15 +21,15 @@ and/or hosts that will be allowed to use the server, for example,
 Cross compilation
 
 On x86_64 only, the server supports full multiarch cross compilation -- it can
-build for i486 and x86_64, and for arm if the arm-x-toolchain package is
-installed.  Only one running instance of distccd is required.
+build for i486/i586/i686 and x86_64, and for arm if the arm-x-toolchain package
+is installed.  Only one running instance of distccd is required.
 
 * To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
-Slackware clients (i486 etc), you don't need to do anything.  Slackware's
+Slackware clients (i486/i586/i686), you don't need to do anything.  Slackware's
 64 bit gcc packages already support 32 bit cross-compilation :-)
 
-* To cross-compile for Slackware ARM clients, you need to specify the option
-'ARMX=yes' and install the arm-x-toolchain package (gfortran not supported).
+* To cross-compile for Slackware ARM clients, you need to install the
+arm-x-toolchain package on the server (gfortran not supported).
 
 * Other configurations are not supported.
 

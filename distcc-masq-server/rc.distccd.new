@@ -16,8 +16,8 @@ distccd_start() {
 
     # Ensure we don't have a masquerade dir in $PATH if rc.distccd is run manually
     export PATH=/usr/sbin:/sbin:/usr/bin:/bin
-    # We don't use /etc/distcc/commands.allow.sh
-    # (avoids a conflict with Slackware's distcc package)
+    # We use our own /etc/distcc/commands.allow instead of /etc/distcc/commands.allow.sh
+    # (to avoid replacing the commands.allow.sh in Slackware's distcc package)
     export DISTCC_CMDLIST=/etc/distcc/commands.allow
     export DISTCC_CMDLIST_NUMWORDS=1
 
