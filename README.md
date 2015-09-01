@@ -52,15 +52,15 @@ and/or hosts that will be allowed to use the server, for example,
 ### Cross compilation
 
 On x86_64 only, the server supports full multiarch cross compilation -- it can
-build for i486 and x86_64, and for arm if the arm-x-toolchain package is
-installed.  Only one running instance of distccd is required.
+build for i486/i586/i686 and x86_64, and for arm if the arm-x-toolchain package
+is installed.  Only one running instance of distccd is required.
 
 * To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
 Slackware clients (i486 etc), you don't need to do anything.  Slackware's
 64 bit gcc packages already support 32 bit cross-compilation :-)
 
-* To cross-compile for Slackware ARM clients, you need to specify the option
-'ARMX=yes' and install the arm-x-toolchain package (gfortran not supported).
+* To cross-compile for Slackware ARM clients, you need to install the
+arm-x-toolchain package on the server (gfortran not supported).
 
 * Other configurations are not supported.
 
@@ -70,7 +70,7 @@ This is Stuart Winter's x-toolchain (from the Slackware ARM devtools),
 packaged to work with distcc-masq-client and distcc-masq-server.  It is
 intended to be installed on a distcc server, and called from a Slackware ARM
 client using masquerade mode.  The distcc server should be running either
-Slackware64 (x86_64) or Slackware (i486).
+Slackware64 (x86_64) or Slackware (i486/i586/i686).
 
 If your client system is running Slackware ARM 14.1, you should install
 arm-x-toolchain version 14.1 on your distcc server.  This is the default.
@@ -110,10 +110,11 @@ client, and the following message will be displayed:
 distcc[pid] (dcc_build_somewhere) Warning: failed to distribute, running locally instead
 ```
 
-This is normal behaviour.  Many packages use ./configure scripts that rely on
-compilation failures to discover information about the build environment, and
-therefore distcc may show the above message during the first minute of building
-a package.
+This is normal behaviour.  Many packages use ./configure scripts or cmake
+feature tests that rely on compilation failures to discover information about
+the build environment, and therefore distcc may show the above message for
+up to a minute. However, if the message persists, there may be a problem, and
+you can check the log file (/var/log/distccd).
 
 A few packages simply will not build with distcc.
 These SlackBuilds.org packages are known to fail:
