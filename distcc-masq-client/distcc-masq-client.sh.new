@@ -1,0 +1,2 @@
+export DISTCC_HOSTS="$(grep -v '^[[:space:]]*#' /etc/distcc/hosts)"
+export PATH="%MASQDIR%:$PATH"

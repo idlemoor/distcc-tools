@@ -1,0 +1,2 @@
+setenv DISTCC_HOSTS "`grep -v '^[[:space:]]*#' /etc/distcc/hosts`"
+set path = ( %MASQDIR% $path )

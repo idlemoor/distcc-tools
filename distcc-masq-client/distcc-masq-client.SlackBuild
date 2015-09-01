@@ -24,14 +24,14 @@
 
 PRGNAM=distcc-masq-client
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-4}
 TAG=${TAG:-_dbs}
 
 SLKABI=""
 case "${ARCH:=$(uname -m)}" in
   i?86) ARCH=i486 ;;
   arm*) ARCH=arm; SLKABI="-gnueabi" ;;
-     *) ;;
+     *) : ;;
 esac
 
 CWD=$(pwd)
@@ -45,14 +45,22 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  current)  GCCVERSION=4.9.3 ;;   # no need to do anything for new c89/c99 :-)
-  14.2)     GCCVERSION=4.9.3 ;;
+  current)  GCCVERSION=4.9.3
+            [ "$ARCH" = "i486" ] && ARCH=i586
+            ;;
+  14.2)     GCCVERSION=4.9.3
+            [ "$ARCH" = "i486" ] && ARCH=i586
+            ;;
   14.1)     GCCVERSION=4.8.2
             [ "$ARCH" = "arm" ] && GCCVERSION=4.8.4
             ;;
-  14.0)     GCCVERSION=4.7.1 ;;
-  13.37)    GCCVERSION=4.5.2 ;;
-  *)        echo "Version $VERSION is not supported" >&2; exit 1 ;;
+  14.0)     GCCVERSION=4.7.1
+            ;;
+  13.37)    GCCVERSION=4.5.2
+            ;;
+  *)        echo "Version $VERSION is not supported" >&2
+            exit 1
+            ;;
 esac
 
 MASQDIR=${MASQDIR:-/opt/$PRGNAM/bin}
@@ -63,12 +71,7 @@ for compiler in \
   gcc \
   cc \
 ; do
-  cat <<++++ > $PKG/$MASQDIR/$compiler
-#!/bin/sh
-[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-gcc "\$@"
-exec /usr/bin/distcc /usr/bin/$ARCH-slackware-linux$SLKABI-gcc "\$@"
-++++
-  chmod ugo+x $PKG/$MASQDIR/$compiler
+  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-gcc.sh > $PKG/$MASQDIR/$compiler
 done
 
 for compiler in \
@@ -76,12 +79,7 @@ for compiler in \
   g++ \
   c++ \
 ; do
-  cat <<++++ > $PKG/$MASQDIR/$compiler
-#!/bin/sh
-[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-g++ "\$@"
-exec /usr/bin/distcc /usr/bin/$ARCH-slackware-linux$SLKABI-g++ "\$@"
-++++
-  chmod ugo+x $PKG/$MASQDIR/$compiler
+  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-g++.sh > $PKG/$MASQDIR/$compiler
 done
 
 if [ "$ARCH" != 'arm' ]; then
@@ -93,12 +91,7 @@ if [ "$ARCH" != 'arm' ]; then
     g77 \
     g95 \
   ; do
-    cat <<++++ > $PKG/$MASQDIR/$compiler
-  #!/bin/sh
-  [ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$ARCH-slackware-linux$SLKABI-gfortran "\$@"
-  exec /usr/bin/distcc /usr/bin/$ARCH-slackware-linux$SLKABI-gfortran "\$@"
-++++
-    chmod ugo+x $PKG/$MASQDIR/$compiler
+    sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-gfortran.sh > $PKG/$MASQDIR/$compiler
   done
 fi
 
@@ -106,13 +99,10 @@ for compiler in \
   clang \
   clang++ \
 ; do
-  cat <<++++ > $PKG/$MASQDIR/$compiler
-#!/bin/sh
-[ -z "\$DISTCC_HOSTS" ] && exec /usr/bin/$compiler -integrated-as -target $ARCH-slackware-linux$SLKABI "\$@"
-exec /usr/bin/distcc /usr/bin/$compiler -integrated-as -target $ARCH-slackware-linux$SLKABI "\$@"
-++++
-  chmod ugo+x $PKG/$MASQDIR/$compiler
+  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-$compiler.sh > $PKG/$MASQDIR/$compiler
 done
+
+chmod ugo+x $PKG/$MASQDIR/*
 
 for compiler in \
   $ARCH-slackware-linux$SLKABI-gcc-$GCCVERSION \
@@ -127,14 +117,8 @@ for compiler in \
 done
 
 mkdir -p $PKG/etc/profile.d
-cat <<++++ > $PKG/etc/profile.d/$PRGNAM.sh.new
-export DISTCC_HOSTS="\$(grep -v '^[[:space:]]*#' /etc/distcc/hosts)"
-export PATH="$MASQDIR:\$PATH"
-++++
-cat <<++++ > $PKG/etc/profile.d/$PRGNAM.csh.new
-setenv DISTCC_HOSTS "\`grep -v '^[[:space:]]*#' /etc/distcc/hosts\`"
-set path = ( $MASQDIR \$path )
-++++
+sed -e "s:%MASQDIR%:$MASQDIR:g" < $CWD/$PRGNAM.sh.new  > $PKG/etc/profile.d/$PRGNAM.sh.new
+sed -e "s:%MASQDIR%:$MASQDIR:g" < $CWD/$PRGNAM.csh.new > $PKG/etc/profile.d/$PRGNAM.csh.new
 chmod ugo+x $PKG/etc/profile.d/*
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
