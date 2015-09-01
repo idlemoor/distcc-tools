@@ -25,18 +25,16 @@
 PRGNAM=arm-x-toolchain
 TARNAM=x-toolchain-slk
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-4}
 TAG=${TAG:-_dbs}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
 
-if [ -z "$ARCH" ]; then
-  case "$( uname -m )" in
-    i?86) ARCH=i486 ;;
-    arm*) ARCH=arm ;;
-       *) ARCH=$( uname -m ) ;;
-  esac
-fi
+case "${ARCH:=$(uname -m)}" in
+  i?86) ARCH=i486 ;;
+  arm*) echo "Cross compilation for arm on $ARCH is not supported." ; exit 1 ;;
+     *) : ;;
+esac
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
@@ -65,6 +63,7 @@ if [ -f $CWD/$TARNAM-$VERSION.tar.xz ]; then
 elif [ -d $CWD/x-toolchain ]; then
   VERSION="current"
   EXTRAVERSION="_$(date -r $CWD/x-toolchain/x-build '+%Y%m%d')"
+  [ "$ARCH" = 'i486' ] && ARCH='i586'
   rm -rf $TMP/x-toolchain
   cp -a $CWD/x-toolchain $TMP/
 else
@@ -85,34 +84,27 @@ sed -i \
   -e "s#^INSTLOC=.*#INSTLOC=${PKG}${INSTLOC}#" \
   x-build
 
-sh ./x-build
+sh ./x-build || exit 1
 
-GCCVERSION=$(ls ${PKG}${INSTLOC}/bin/arm-slackware-linux-gnueabi-gcc-* | sed 's/.*-//')
+GCCVERSION=$(${PKG}${INSTLOC}/bin/arm-slackware-linux-gnueabi-gcc --version | head -1 | cut -f3 -d' ')
 
 mkdir -p $PKG/usr/bin
 for CC in gcc gcc-$GCCVERSION ; do
-  cat <<++++ > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CC
-#!/bin/sh
-export LD_LIBRARY_PATH=/opt/$PRGNAM/x86_64-slackware-linux/arm-slackware-linux-gnueabi/lib
-exec x86_64-slackware-linux-gcc "\$@"
-++++
-  chmod ugo+x $PKG/usr/bin/arm-slackware-linux-gnueabi-$CC
+  sed -e "s/%ARCH%/$ARCH/" -e "s/%PRGNAM%/$PRGNAM/" \
+    $CWD/arm-gccwrapper.sh > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CC
 done
 for CXX in c++ g++ ; do
-  cat <<++++ > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CXX
-#!/bin/sh
-export LD_LIBRARY_PATH=/opt/$PRGNAM/x86_64-slackware-linux/arm-slackware-linux-gnueabi/lib
-exec x86_64-slackware-linux-g++ "\$@"
-++++
-  chmod ugo+x $PKG/usr/bin/arm-slackware-linux-gnueabi-$CXX
+  sed -e "s/%ARCH%/$ARCH/" -e "s/%PRGNAM%/$PRGNAM/" \
+    $CWD/arm-g++wrapper.sh > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CXX
 done
+chmod ugo+x $PKG/usr/bin/arm-slackware-linux-gnueabi-*
 
 # It's almost pump-mode ready, so we won't remove stuff that masq-mode doesn't
-# really need, but the info and man pages can get knotted:
+# really need, but the info and man pages are superfluous:
 rm -rf $PKG/opt/$PRGNAM/share
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-grep '^#' x-build > $PKG/usr/doc/$PRGNAM-$VERSION/README
+grep '^#' x-build > $PKG/usr/doc/$PRGNAM-$VERSION/README.x-build
 cp -a \
   $CWD/README \
   buildnotes.txt \

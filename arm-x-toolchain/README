@@ -2,7 +2,7 @@ This is Stuart Winter's x-toolchain (from the Slackware ARM devtools),
 packaged to work with distcc-masq-client and distcc-masq-server.  It is
 intended to be installed on a distcc server, and called from a Slackware ARM
 client using masquerade mode.  The distcc server should be running either
-Slackware64 (x86_64) or Slackware (i486).
+Slackware64 (x86_64) or Slackware (i486/i586/i686).
 
 If your client system is running Slackware ARM 14.1, you should install
 arm-x-toolchain version 14.1 on your distcc server.  This is the default.
