@@ -44,11 +44,11 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  current)  GCCVERSION=4.9.3 ; ARCH32=i586 ;;
-  14.2)     GCCVERSION=4.9.3 ; ARCH32=i586 ;;
-  14.1)     GCCVERSION=4.8.2 ; ARCH32=i486 ; ARMGCCVERSION=4.8.4 ;;
-  14.0)     GCCVERSION=4.7.1 ; ARCH32=i486 ;;
-  13.37)    GCCVERSION=4.5.2 ; ARCH32=i486 ;;
+  current)  GCCVERSION=4.9.3 ; GCCARCH32=i586 ;;
+  14.2)     GCCVERSION=4.9.3 ; GCCARCH32=i586 ;;
+  14.1)     GCCVERSION=4.8.2 ; GCCARCH32=i486 ; GCCVERSIONARM=4.8.4 ;;
+  14.0)     GCCVERSION=4.7.1 ; GCCARCH32=i486 ;;
+  13.37)    GCCVERSION=4.5.2 ; GCCARCH32=i486 ;;
   *)        echo "Version $VERSION is not supported" >&2; exit 1 ;;
 esac
 
@@ -58,13 +58,13 @@ if [ "$ARCH" = 'x86_64' ]; then
   # to the x86_64 compiler with -m32. They are not required on other arches.
   mkdir -p $PKG/usr/bin
   for CC in gcc gcc-$GCCVERSION ; do
-    cat $CWD/x86-gccwrapper.sh > $PKG/usr/bin/${ARCH32}-slackware-linux-$CC
+    cat $CWD/x86-gccwrapper.sh > $PKG/usr/bin/${GCCARCH32}-slackware-linux-$CC
   done
   for CXX in c++ g++ ; do
-    cat $CWD/x86-g++wrapper.sh > $PKG/usr/bin/${ARCH32}-slackware-linux-$CXX
+    cat $CWD/x86-g++wrapper.sh > $PKG/usr/bin/${GCCARCH32}-slackware-linux-$CXX
   done
   for FC in g77 g95 gfortran gfortran-$GCCVERSION ; do
-    cat $CWD/x86-gfortranwrapper.sh > $PKG/usr/bin/${ARCH32}-slackware-linux-$CXX
+    cat $CWD/x86-gfortranwrapper.sh > $PKG/usr/bin/${GCCARCH32}-slackware-linux-$FC
   done
   chmod ugo+x $PKG/usr/bin/*-slackware-linux-*
 
@@ -84,9 +84,9 @@ cp -a \
 
 mkdir -p $PKG/etc/distcc
 sed \
-  -e "s/%ARCH32%/$ARCH32/g" \
+  -e "s/%GCCARCH32%/$GCCARCH32/g" \
   -e "s/%GCCVERSION%/$GCCVERSION/g" \
-  -e "s/%ARMGCCVERSION%/$ARMGCCVERSION/g" \
+  -e "s/%GCCVERSIONARM%/${GCCVERSIONARM:-$GCCVERSION}/g" \
   < $CWD/commands.allow.new > $PKG/etc/distcc/commands.allow.new
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
