@@ -63,7 +63,8 @@ if [ -f $CWD/$TARNAM-$VERSION.tar.xz ]; then
 elif [ -d $CWD/x-toolchain ]; then
   VERSION="current"
   EXTRAVERSION="_$(date -r $CWD/x-toolchain/x-build '+%Y%m%d')"
-  [ "$ARCH" = 'i486' ] && ARCH='i586'
+  # x-build uses 'i486-slackware-linux' on x86, but eventually we might need this:
+  # [ "$ARCH" = 'i486' ] && ARCH='i586'
   rm -rf $TMP/x-toolchain
   cp -a $CWD/x-toolchain $TMP/
 else
