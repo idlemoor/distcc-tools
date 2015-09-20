@@ -29,7 +29,7 @@ environment variable, see 'man distcc', section 'HOST SPECIFICATIONS'.
 This package sets up a 'masquerade mode' distcc server for gcc (including g++,
 objc and gfortran) and clang/clang++.
 
-The server and the clients should all have the same versions of Slackware
+The server and the clients should all have the same version of Slackware
 (i.e. all running 14.1, or all running the same revision of -current).
 
 To start the distccd daemon automatically on boot, you must add these lines in
@@ -51,18 +51,34 @@ and/or hosts that will be allowed to use the server, for example,
 
 ### Cross compilation
 
-On x86_64 only, the server supports full multiarch cross compilation -- it can
-build for i486/i586/i686 and x86_64, and for arm if the arm-x-toolchain package
-is installed.  Only one running instance of distccd is required.
+On x86_64, the server supports full multiarch cross compilation -- it can
+build for x86_64, for i486/i586/i686, and for arm if the arm-x-toolchain package
+is installed:
 
 * To compile for Slackware 64 (x86_64) clients, and to cross-compile for 32 bit
 Slackware clients (i486 etc), you don't need to do anything.  Slackware's
-64 bit gcc packages already support 32 bit cross-compilation :-)
+x86_64 gcc and llvm packages already support i486/i586/i686 cross-compilation.
 
 * To cross-compile for Slackware ARM clients, you need to install the
 arm-x-toolchain package on the server (gfortran not supported).
 
-* Other configurations are not supported.
+On i486/i586/i686, the server supports i486/i586/i686 clients, and also arm
+clients if the arm-x-toolchain package is installed (gfortran not supported).
+
+On arm, the server supports arm clients. Cross compilation is not supported.
+
+| server | client | support         |
+|--------|--------|-----------------|
+| x86_64 | x86_64 | yes             |
+| x86_64 | i?86   | yes             |
+| x86_64 | arm    | arm-x-toolchain |
+| i?86   | x86_64 | no              |
+| i?86   | i?86   | yes             |
+| i?86   | arm    | arm-x-toolchain |
+| arm    | x86_64 | no              |
+| arm    | i?86   | no              |
+| arm    | arm    | yes             |
+
 
 ## arm-x-toolchain
 
