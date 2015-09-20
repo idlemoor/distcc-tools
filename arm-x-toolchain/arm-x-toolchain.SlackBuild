@@ -91,11 +91,11 @@ GCCVERSION=$(${PKG}${INSTLOC}/bin/arm-slackware-linux-gnueabi-gcc --version | he
 
 mkdir -p $PKG/usr/bin
 for CC in gcc gcc-$GCCVERSION ; do
-  sed -e "s/%ARCH%/$ARCH/" -e "s/%PRGNAM%/$PRGNAM/" \
+  sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" \
     $CWD/arm-gccwrapper.sh > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CC
 done
 for CXX in c++ g++ ; do
-  sed -e "s/%ARCH%/$ARCH/" -e "s/%PRGNAM%/$PRGNAM/" \
+  sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" \
     $CWD/arm-g++wrapper.sh > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CXX
 done
 chmod ugo+x $PKG/usr/bin/arm-slackware-linux-gnueabi-*
