@@ -71,7 +71,8 @@ for compiler in \
   gcc \
   cc \
 ; do
-  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-gcc.sh > $PKG/$MASQDIR/$compiler
+  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" -e "s/%GCCVERSION%/$GCCVERSION/g" \
+    < $CWD/masq-gcc.sh > $PKG/$MASQDIR/$compiler
 done
 
 for compiler in \
@@ -79,7 +80,8 @@ for compiler in \
   g++ \
   c++ \
 ; do
-  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-g++.sh > $PKG/$MASQDIR/$compiler
+  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" -e "s/%GCCVERSION%/$GCCVERSION/g" \
+    < $CWD/masq-g++.sh > $PKG/$MASQDIR/$compiler
 done
 
 if [ "$ARCH" != 'arm' ]; then
@@ -91,7 +93,8 @@ if [ "$ARCH" != 'arm' ]; then
     g77 \
     g95 \
   ; do
-    sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-gfortran.sh > $PKG/$MASQDIR/$compiler
+    sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" -e "s/%GCCVERSION%/$GCCVERSION/g" \
+      < $CWD/masq-gfortran.sh > $PKG/$MASQDIR/$compiler
   done
 fi
 
@@ -99,7 +102,8 @@ for compiler in \
   clang \
   clang++ \
 ; do
-  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" < $CWD/masq-$compiler.sh > $PKG/$MASQDIR/$compiler
+  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" \
+    < $CWD/masq-$compiler.sh > $PKG/$MASQDIR/$compiler
 done
 
 chmod ugo+x $PKG/$MASQDIR/*
