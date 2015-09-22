@@ -24,8 +24,11 @@
 
 PRGNAM=distcc-masq-client
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-4}
+BUILD=${BUILD:-5}
 TAG=${TAG:-_SBo}
+
+INSTLOC=${INSTLOC:-/opt/$PRGNAM}
+SERVERLOC=${SERVERLOC:-/opt/distcc-masq-server}
 
 SLKABI=""
 case "${ARCH:=$(uname -m)}" in
@@ -46,84 +49,86 @@ mkdir -p $PKG $OUTPUT
 
 case $VERSION in
   current)  GCCVERSION=4.9.3
-            [ "$ARCH" = "i486" ] && ARCH=i586
+            ARCH32=i586
             ;;
   14.2)     GCCVERSION=4.9.3
-            [ "$ARCH" = "i486" ] && ARCH=i586
+            ARCH32=i586
             ;;
   14.1)     GCCVERSION=4.8.2
             [ "$ARCH" = "arm" ] && GCCVERSION=4.8.4
+            ARCH32=i486
             ;;
   14.0)     GCCVERSION=4.7.1
+            ARCH32=i486
             ;;
   13.37)    GCCVERSION=4.5.2
+            ARCH32=i486
             ;;
   *)        echo "Version $VERSION is not supported" >&2
             exit 1
             ;;
 esac
+# Fixup ARCH for 14.2+
+[ "$ARCH" = 'i486' ] && ARCH="$ARCH32"
 
-MASQDIR=${MASQDIR:-/opt/$PRGNAM/bin}
-mkdir -p $PKG/$MASQDIR
+# Provide a symlink that's missing from the gcc SlackBuild.  We need this for
+# when we've forced the version onto g++ and then distcc drops back to rerun locally.
+mkdir -p $PKG/usr/bin
+ln -sf g++-gcc-$GCCVERSION $PKG/usr/bin/$ARCH-slackware-linux$SLKABI-g++-$GCCVERSION
 
-for compiler in \
-  gcc-$GCCVERSION \
-  gcc \
-  cc \
-; do
-  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" -e "s/%GCCVERSION%/$GCCVERSION/g" \
-    < $CWD/masq-gcc.sh > $PKG/$MASQDIR/$compiler
+mkdir -p $PKG/$INSTLOC/bin
+
+for COMPILER in clang clang++ ; do
+  sed \
+    -e "s/%COMPILER%/$COMPILER/g" \
+    -e "s/%ARCH%/$ARCH/g" \
+    -e "s/%SLKABI%/$SLKABI/g" \
+    < $CWD/masq-clang-template.sh \
+    > $PKG/$INSTLOC/bin/$ARCH-slackware-linux-$COMPILER
+  chmod ugo+x $PKG/$INSTLOC/bin/$ARCH-slackware-linux-$COMPILER
+  ln -s \
+    $INSTLOC/bin/$ARCH-slackware-linux-$COMPILER \
+    $PKG/$INSTLOC/bin/$COMPILER
+  if [ "$ARCH" = 'x86_64' ]; then
+    # 32 bit support for clang on x86_64 :)
+    sed \
+      -e "s/%COMPILER%/$COMPILER/g" \
+      -e "s/%ARCH%/$ARCH32/g" \
+      -e "s/%SLKABI%/$SLKABI/g" \
+      < $CWD/masq-clang-template.sh \
+      > $PKG/$INSTLOC/bin/$ARCH32-slackware-linux-$COMPILER
+    chmod ugo+x $PKG/$INSTLOC/bin/$ARCH32-slackware-linux-$COMPILER
+  fi
 done
 
-for compiler in \
-  g++-gcc-$GCCVERSION \
-  g++ \
-  c++ \
-; do
-  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" -e "s/%GCCVERSION%/$GCCVERSION/g" \
-    < $CWD/masq-g++.sh > $PKG/$MASQDIR/$compiler
-done
-
-if [ "$ARCH" != 'arm' ]; then
-  # arm-x-toolchain does not include gfortran, but if your distcc server is
-  # native ARM, you are welcome to hack this SlackBuild :-)
-  for compiler in \
-    gfortran-gcc-$GCCVERSION \
-    gfortran \
-    g77 \
-    g95 \
-  ; do
-    sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" -e "s/%GCCVERSION%/$GCCVERSION/g" \
-      < $CWD/masq-gfortran.sh > $PKG/$MASQDIR/$compiler
+gcclist="gcc g++ gfortran"
+# arm-x-toolchain does not include gfortran, but if your distcc server is
+# native ARM, you are welcome to comment out the next line :-)
+[ "$ARCH" = 'arm' ] && gcclist="gcc g++"
+for COMPILER in $gcclist ; do
+  sed \
+    -e "s/%COMPILER%/$COMPILER/g" \
+    -e "s/%ARCH%/$ARCH/g" \
+    -e "s/%SLKABI%/$SLKABI/g" \
+    -e "s/%GCCVERSION%/$GCCVERSION/g" \
+    < $CWD/masq-gcc-template.sh \
+    > $PKG/$INSTLOC/bin/$ARCH-slackware-linux$SLKABI-$COMPILER-$GCCVERSION
+  chmod ugo+x $PKG/$INSTLOC/bin/$ARCH-slackware-linux$SLKABI-$COMPILER-$GCCVERSION
+  [ "$COMPILER" = 'gcc' ] && synonyms="gcc-$GCCVERSION gcc cc $ARCH-slackware-linux$SLKABI-gcc"
+  [ "$COMPILER" = 'g++' ] && synonyms="g++-gcc-$GCCVERSION g++ c++ $ARCH-slackware-linux$SLKABI-g++"
+  [ "$COMPILER" = 'gfortran' ] && synonyms="gfortran-gcc-$GCCVERSION gfortran f77 g77 f95 g95 $ARCH-slackware-linux$SLKABI-gfortran"
+  for synonym in $synonyms ; do
+    ln -s \
+      $INSTLOC/bin/$ARCH-slackware-linux$SLKABI-$COMPILER-$GCCVERSION \
+      $PKG/$INSTLOC/bin/$synonym
   done
-fi
-
-for compiler in \
-  clang \
-  clang++ \
-; do
-  sed -e "s/%ARCH%/$ARCH/g" -e "s/%SLKABI%/$SLKABI/g" \
-    < $CWD/masq-$compiler.sh > $PKG/$MASQDIR/$compiler
-done
-
-chmod ugo+x $PKG/$MASQDIR/*
-
-for compiler in \
-  $ARCH-slackware-linux$SLKABI-gcc-$GCCVERSION \
-  $ARCH-slackware-linux$SLKABI-gcc \
-  $ARCH-slackware-linux$SLKABI-g++ \
-  $ARCH-slackware-linux$SLKABI-c++ \
-  $ARCH-slackware-linux$SLKABI-gfortran \
-  $ARCH-slackware-linux$SLKABI-clang \
-  $ARCH-slackware-linux$SLKABI-clang++ \
-; do
-  ln -s /usr/bin/distcc $PKG/$MASQDIR/$compiler
 done
 
 mkdir -p $PKG/etc/profile.d
-sed -e "s:%MASQDIR%:$MASQDIR:g" < $CWD/$PRGNAM.sh.new  > $PKG/etc/profile.d/$PRGNAM.sh.new
-sed -e "s:%MASQDIR%:$MASQDIR:g" < $CWD/$PRGNAM.csh.new > $PKG/etc/profile.d/$PRGNAM.csh.new
-chmod ugo+x $PKG/etc/profile.d/*
+sed -e "s:%MASQDIR%:$INSTLOC/bin:g" < $CWD/$PRGNAM.sh.new  > $PKG/etc/profile.d/$PRGNAM.sh.new
+chmod ugo+x $PKG/etc/profile.d/$PRGNAM.sh.new
+sed -e "s:%MASQDIR%:$INSTLOC/bin:g" < $CWD/$PRGNAM.csh.new > $PKG/etc/profile.d/$PRGNAM.csh.new
+chmod ugo+x $PKG/etc/profile.d/$PRGNAM.csh.new
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
