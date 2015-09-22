@@ -22,5 +22,4 @@ preserve_perms() {
   config $NEW
 }
 
-config etc/distcc/commands.allow.new
 preserve_perms etc/rc.d/rc.distccd.new

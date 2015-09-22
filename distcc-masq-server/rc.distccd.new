@@ -14,11 +14,12 @@ distccd_start() {
     touch $LOGFILE $PIDFILE
     chown nobody:nogroup $LOGFILE $PIDFILE
 
-    # Ensure we don't have a masquerade dir in $PATH if rc.distccd is run manually
-    export PATH=/usr/sbin:/sbin:/usr/bin:/bin
-    # We use our own /etc/distcc/commands.allow instead of /etc/distcc/commands.allow.sh
-    # (to avoid replacing the commands.allow.sh in Slackware's distcc package)
-    export DISTCC_CMDLIST=/etc/distcc/commands.allow
+    # Replace the whole path to exclude the masquerade dir if rc.distccd is run manually
+    export PATH=%SERVERLOC%/bin:/usr/sbin:/sbin:/usr/bin:/bin
+    # We don't use /etc/distcc/commands.allow.sh
+    export DISTCC_CMDLIST=/var/cache/distccd/commands.allow
+    mkdir -p $(dirname $DISTCC_CMDLIST)
+    ls -1 %SERVERLOC%/bin > $DISTCC_CMDLIST
     export DISTCC_CMDLIST_NUMWORDS=1
 
     /usr/bin/distccd \
@@ -35,7 +36,7 @@ distccd_start() {
 
 # Stop distccd:
 distccd_stop() {
-  if [ -r $PIDFILE ]; then
+  if [ -s $PIDFILE ] ; then
     kill $(cat $PIDFILE)
   else
     killall distccd

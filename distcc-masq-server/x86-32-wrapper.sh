@@ -3,4 +3,4 @@ declare -a arglist
 for arg in "$@"; do
   [ "$arg" != '-m64' ] && arglist+=( "$arg" )
 done
-exec x86_64-slackware-linux-gcc -m32 "${arglist[@]}"
+exec /usr/bin/x86_64-slackware-linux-%COMPILER% -m32 "${arglist[@]}"
