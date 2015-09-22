@@ -10,7 +10,7 @@ distcc-masq-server: distcc-masq-server (distcc server)
 distcc-masq-server:
 distcc-masq-server: This package sets up a 'masquerade mode' distcc server.
 distcc-masq-server:
-distcc-masq-server: https://github.com/idlemoor/distcc-tools
+distcc-masq-server: Part of distcc-tools, see https://github.com/idlemoor/distcc-tools
 distcc-masq-server:
 distcc-masq-server:
 distcc-masq-server:

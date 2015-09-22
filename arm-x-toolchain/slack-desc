@@ -13,7 +13,7 @@ arm-x-toolchain: It is intended to be installed on a distcc server, and called f
 arm-x-toolchain: Slackware ARM client using masquerade mode.  The distcc server should
 arm-x-toolchain: be running either Slackware64 (x86_64) or Slackware (i486/i586/i686).
 arm-x-toolchain:
-arm-x-toolchain: https://github.com/idlemoor/distcc-tools
+arm-x-toolchain: Part of distcc-tools, see https://github.com/idlemoor/distcc-tools
 arm-x-toolchain:
 arm-x-toolchain:
 arm-x-toolchain:
