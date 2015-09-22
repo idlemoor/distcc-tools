@@ -25,10 +25,11 @@
 PRGNAM=arm-x-toolchain
 TARNAM=x-toolchain-slk
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-4}
+BUILD=${BUILD:-5}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
+SERVERLOC=${SERVERLOC:-/opt/distcc-masq-server}
 
 case "${ARCH:=$(uname -m)}" in
   i?86) ARCH=i486 ;;
@@ -89,16 +90,23 @@ sh ./x-build || exit 1
 
 GCCVERSION=$(${PKG}${INSTLOC}/bin/arm-slackware-linux-gnueabi-gcc --version | head -1 | cut -f3 -d' ')
 
-mkdir -p $PKG/usr/bin
+# Provide a versioned g++.  We need this for when we've forced the version
+# onto g++ and then distcc drops back to rerun locally. We'll copy rather than
+# doing a symlink, because all the others are like that :-)
+cp -a \
+  $PKG/$INSTLOC/bin/arm-slackware-linux-gnueabi-g++ \
+  $PKG/$INSTLOC/bin/arm-slackware-linux-gnueabi-g++-$GCCVERSION
+
+mkdir -p $PKG/$SERVERLOC/bin
 for CC in gcc gcc-$GCCVERSION ; do
   sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" \
-    $CWD/arm-gccwrapper.sh > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CC
+    $CWD/arm-gccwrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-$CC
 done
-for CXX in c++ g++ ; do
+for CXX in c++ g++ g++-$GCCVERSION; do
   sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" \
-    $CWD/arm-g++wrapper.sh > $PKG/usr/bin/arm-slackware-linux-gnueabi-$CXX
+    $CWD/arm-g++wrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-$CXX
 done
-chmod ugo+x $PKG/usr/bin/arm-slackware-linux-gnueabi-*
+chmod ugo+x $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-*
 
 # It's almost pump-mode ready, so we won't remove stuff that masq-mode doesn't
 # really need, but the info and man pages are superfluous:
