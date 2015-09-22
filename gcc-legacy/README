@@ -1,0 +1,18 @@
+This SlackBuild repackages old versions of the gcc compilers from previous
+versions of Slackware. It is intended to be installed on a distcc server, for
+use by distcc clients running other versions of Slackware. With this package
+installed, the distcc server will be able to build multiple versions of gcc.
+
+By default, the SlackBuild will repackage gcc from Slackware 14.1 and 14.0.
+To specify which Slackware versions should be repackaged, specify the VERSION
+environment variable when running the SlackBuild.  Multiple Slackware versions
+should be separated by '+', for example
+
+  VERSION="14.1+14.0" ./gcc-legacy.SlackBuild
+
+The gcc-legacy package does not conflict with Slackware's own gcc packages.
+
+clang/clang++ legacy versions are not supported.
+
+For more information, please see
+  https://github.com/idlemoor/distcc-tools
