@@ -36,17 +36,17 @@ clients if the arm-x-toolchain package is installed (gfortran not supported).
 
 On arm, the server supports arm clients. Cross compilation is not supported.
 
-| server | client | support         |
-|--------|--------|-----------------|
-| x86_64 | x86_64 | yes             |
-| x86_64 | i?86   | yes             |
-| x86_64 | arm    | arm-x-toolchain |
-| i?86   | x86_64 | no              |
-| i?86   | i?86   | yes             |
-| i?86   | arm    | arm-x-toolchain |
-| arm    | x86_64 | no              |
-| arm    | i?86   | no              |
-| arm    | arm    | yes             |
+| server | client | support                  |
+|--------|--------|--------------------------|
+| x86_64 | x86_64 | yes                      |
+| x86_64 | i?86   | yes                      |
+| x86_64 | arm    | requires arm-x-toolchain |
+| i?86   | x86_64 | no                       |
+| i?86   | i?86   | yes                      |
+| i?86   | arm    | requires arm-x-toolchain |
+| arm    | x86_64 | no                       |
+| arm    | i?86   | no                       |
+| arm    | arm    | yes                      |
 
 
 For more information, please see
