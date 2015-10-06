@@ -1,5 +1,5 @@
-This package sets up a 'masquerade mode' distcc server for gcc (including g++,
-objc and gfortran) and clang/clang++.
+This package sets up a 'masquerade mode' distcc server for gcc (including g++
+and objc) and clang/clang++.
 
 If the server and the clients have different versions of Slackware installed,
 you will also need the 'gcc-legacy' package.
@@ -29,15 +29,15 @@ Slackware clients (i486 etc), you don't need to do anything.  Slackware's
 x86_64 gcc and llvm packages already support i486/i586/i686 cross-compilation.
 
 * To cross-compile for Slackware ARM clients, you need to install the
-arm-x-toolchain package on the server (gfortran not supported).
+arm-x-toolchain package on the server.
 
 On i486/i586/i686, the server supports i486/i586/i686 clients, and also arm
-clients if the arm-x-toolchain package is installed (gfortran not supported).
+clients if the arm-x-toolchain package is installed.
 
 On arm, the server supports arm clients. Cross compilation is not supported.
 
 | server | client | support                  |
-|--------|--------|--------------------------|
+|:------:|:------:|:-------------------------|
 | x86_64 | x86_64 | yes                      |
 | x86_64 | i?86   | yes                      |
 | x86_64 | arm    | requires arm-x-toolchain |
