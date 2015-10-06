@@ -1,8 +1,8 @@
 This package sets up a 'masquerade mode' distcc server for gcc (including g++,
 objc and gfortran) and clang/clang++.
 
-The server and the clients should all have the same version of Slackware
-(i.e. all running 14.1, or all running the same revision of -current).
+If the server and the clients have different versions of Slackware installed,
+you will also need the 'gcc-legacy' package.
 
 To start the distccd daemon automatically on boot, you must add these lines in
 /etc/rc.d/rc.local:
