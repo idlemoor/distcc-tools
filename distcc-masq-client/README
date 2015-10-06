@@ -1,6 +1,13 @@
 This package sets up a 'masquerade mode' distcc client for gcc (including g++,
 objc and gfortran) and clang/clang++.
 
+From Slackware 14.2 onwards, this package also integrates full support for
+ccache (including ccache without distcc), although ccache is not enabled by
+default (see below).
+
+
+Configuring distcc
+
 After installing distcc-masq-client, please configure it by editing the file
 /etc/distcc/hosts -- you should change '127.0.0.1' to the distcc host
 specification for your servers.  This file sets the system-wide default.
@@ -13,5 +20,37 @@ environment variable in the user's profile, for example
 For details of the format of /etc/distcc/hosts and the DISTCC_HOSTS
 environment variable, see 'man distcc', section 'HOST SPECIFICATIONS'.
 
-For more information, please see
-  https://github.com/idlemoor/distcc-tools
+
+Configuring ccache
+
+ccache is not enabled by default. You can configure it by editing the ccache
+system config file /etc/ccache.conf.
+
+* To enable ccache, edit /etc/ccache.conf and change the line
+'disable = true' to 'disable = false'.
+
+* To disable distcc, edit /etc/ccache.conf and delete the line
+'prefix_command = /usr/bin/distcc'.
+
+For alternative ways of configuring ccache options, please see 'man ccache',
+section 'CONFIGURATION'.
+
+
+Disabling distcc and ccache
+
+To temporarily disable distcc, you can unset the DISTCC_HOSTS environment
+variable.  (This is a change to the upstream behaviour, which would apply the
+system-wide defaults if DISTCC_HOSTS is unset.)
+
+  unset DISTCC_HOSTS
+
+To temporarily disable ccache, you can set the CCACHE_DISABLE environment
+variable.
+
+  export CCACHE_DISABLE=true
+
+To disable distcc-masq-client (both ccache and distcc) completely, you can
+block execution of the system-wide profile script:
+
+  chmod ugo-x /etc/profile.d/distcc-masq-client.*
+

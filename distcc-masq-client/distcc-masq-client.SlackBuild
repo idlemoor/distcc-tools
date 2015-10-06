@@ -24,11 +24,10 @@
 
 PRGNAM=distcc-masq-client
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-5}
+BUILD=${BUILD:-6}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
-SERVERLOC=${SERVERLOC:-/opt/distcc-masq-server}
 
 SLKABI=""
 case "${ARCH:=$(uname -m)}" in
@@ -50,9 +49,11 @@ mkdir -p $PKG $OUTPUT
 case $VERSION in
   current)  GCCVERSION=4.9.3
             ARCH32=i586
+            CCACHE=yes
             ;;
   14.2)     GCCVERSION=4.9.3
             ARCH32=i586
+            CCACHE=yes
             ;;
   14.1)     GCCVERSION=4.8.2
             [ "$ARCH" = "arm" ] && GCCVERSION=4.8.4
@@ -102,8 +103,13 @@ for COMPILER in clang clang++ ; do
 done
 
 gcclist="gcc g++ gfortran"
-# arm-x-toolchain does not include gfortran, but if your distcc server is
-# native ARM, you are welcome to comment out the next line :-)
+TEMPLATE=masq-gcc-template.sh
+[ "$CCACHE" = 'yes' ] && TEMPLATE=masq-gcc-ccache-template.sh
+# Notes on gfortran:
+# (1) ccache doesn't cache gfortran, but we call ccache anyway so that the
+#     flag to disable distcc in the ccache config is honoured.
+# (2) arm-x-toolchain does not include gfortran, but if your distcc server is
+#     native ARM, you are welcome to comment out the next line :-)
 [ "$ARCH" = 'arm' ] && gcclist="gcc g++"
 for COMPILER in $gcclist ; do
   sed \
@@ -111,7 +117,7 @@ for COMPILER in $gcclist ; do
     -e "s/%ARCH%/$ARCH/g" \
     -e "s/%SLKABI%/$SLKABI/g" \
     -e "s/%GCCVERSION%/$GCCVERSION/g" \
-    < $CWD/masq-gcc-template.sh \
+    < $CWD/$TEMPLATE \
     > $PKG/$INSTLOC/bin/$ARCH-slackware-linux$SLKABI-$COMPILER-$GCCVERSION
   chmod ugo+x $PKG/$INSTLOC/bin/$ARCH-slackware-linux$SLKABI-$COMPILER-$GCCVERSION
   [ "$COMPILER" = 'gcc' ] && synonyms="gcc-$GCCVERSION gcc cc $ARCH-slackware-linux$SLKABI-gcc"
@@ -123,6 +129,11 @@ for COMPILER in $gcclist ; do
       $PKG/$INSTLOC/bin/$synonym
   done
 done
+
+if [ "$CCACHE" = 'yes' ]; then
+  mkdir -p $PKG/etc
+  cat $CWD/ccache.conf.new > $PKG/etc/ccache.conf.new
+fi
 
 mkdir -p $PKG/etc/profile.d
 sed -e "s:%MASQDIR%:$INSTLOC/bin:g" < $CWD/$PRGNAM.sh.new  > $PKG/etc/profile.d/$PRGNAM.sh.new
@@ -139,6 +150,7 @@ cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 cat $CWD/doinst.sh > $PKG/install/doinst.sh
+[ "$CCACHE" = 'yes' ] && echo 'config etc/ccache.conf.new' >> $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
