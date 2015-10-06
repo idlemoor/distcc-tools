@@ -80,11 +80,13 @@ ln -sf g++-gcc-$GCCVERSION $PKG/usr/bin/$ARCH-slackware-linux$SLKABI-g++-$GCCVER
 mkdir -p $PKG/$INSTLOC/bin
 
 for COMPILER in clang clang++ ; do
+  TEMPLATE=masq-clang-template.sh
+  [ "$CCACHE" = 'yes' ] && TEMPLATE=masq-clang-ccache-template.sh
   sed \
     -e "s/%COMPILER%/$COMPILER/g" \
     -e "s/%ARCH%/$ARCH/g" \
     -e "s/%SLKABI%/$SLKABI/g" \
-    < $CWD/masq-clang-template.sh \
+    < $CWD/$TEMPLATE \
     > $PKG/$INSTLOC/bin/$ARCH-slackware-linux-$COMPILER
   chmod ugo+x $PKG/$INSTLOC/bin/$ARCH-slackware-linux-$COMPILER
   ln -s \
@@ -96,22 +98,15 @@ for COMPILER in clang clang++ ; do
       -e "s/%COMPILER%/$COMPILER/g" \
       -e "s/%ARCH%/$ARCH32/g" \
       -e "s/%SLKABI%/$SLKABI/g" \
-      < $CWD/masq-clang-template.sh \
+      < $CWD/$TEMPLATE \
       > $PKG/$INSTLOC/bin/$ARCH32-slackware-linux-$COMPILER
     chmod ugo+x $PKG/$INSTLOC/bin/$ARCH32-slackware-linux-$COMPILER
   fi
 done
 
-gcclist="gcc g++ gfortran"
-TEMPLATE=masq-gcc-template.sh
-[ "$CCACHE" = 'yes' ] && TEMPLATE=masq-gcc-ccache-template.sh
-# Notes on gfortran:
-# (1) ccache doesn't cache gfortran, but we call ccache anyway so that the
-#     flag to disable distcc in the ccache config is honoured.
-# (2) arm-x-toolchain does not include gfortran, but if your distcc server is
-#     native ARM, you are welcome to comment out the next line :-)
-[ "$ARCH" = 'arm' ] && gcclist="gcc g++"
-for COMPILER in $gcclist ; do
+for COMPILER in gcc g++ ; do
+  TEMPLATE=masq-gcc-template.sh
+  [ "$CCACHE" = 'yes' ] && TEMPLATE=masq-gcc-ccache-template.sh
   sed \
     -e "s/%COMPILER%/$COMPILER/g" \
     -e "s/%ARCH%/$ARCH/g" \
@@ -122,7 +117,6 @@ for COMPILER in $gcclist ; do
   chmod ugo+x $PKG/$INSTLOC/bin/$ARCH-slackware-linux$SLKABI-$COMPILER-$GCCVERSION
   [ "$COMPILER" = 'gcc' ] && synonyms="gcc-$GCCVERSION gcc cc $ARCH-slackware-linux$SLKABI-gcc"
   [ "$COMPILER" = 'g++' ] && synonyms="g++-gcc-$GCCVERSION g++ c++ $ARCH-slackware-linux$SLKABI-g++"
-  [ "$COMPILER" = 'gfortran' ] && synonyms="gfortran-gcc-$GCCVERSION gfortran f77 g77 f95 g95 $ARCH-slackware-linux$SLKABI-gfortran"
   for synonym in $synonyms ; do
     ln -s \
       $INSTLOC/bin/$ARCH-slackware-linux$SLKABI-$COMPILER-$GCCVERSION \
