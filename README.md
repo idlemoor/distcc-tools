@@ -9,17 +9,17 @@ a Slackware-based distcc "build farm":
 
 * arm-x-toolchain (gcc and g++ cross compiler for Slackware ARM)
 
-* gcc-legacy (old versions of gcc/g++/gfortran/objc)
+* gcc-legacy (old versions of gcc/g++/objc)
 
 
 ## distcc-masq-client
 
-This package sets up a 'masquerade mode' distcc client for gcc (including g++,
-objc and gfortran) and clang/clang++.
+This package sets up a 'masquerade mode' distcc client for gcc (including g++
+and objc) and clang/clang++.
 
-From Slackware 14.2 onwards, this package also integrates full support for
-ccache (including ccache without distcc), although ccache is not enabled by
-default (see below).
+With Slackware 14.2, this package also integrates full support for ccache
+(including ccache without distcc), although ccache is not enabled by default
+(see below).
 
 #### Configuring distcc
 
@@ -39,14 +39,16 @@ environment variable, see 'man distcc', section 'HOST SPECIFICATIONS'.
 
 #### Configuring ccache
 
-ccache is not enabled by default. You can configure it by editing the ccache
-system config file /etc/ccache.conf.
+ccache is not enabled by default. It can consume large amounts of storage, and
+one-off compilation (e.g. successfully building a package from SlackBuilds.org)
+is typically 15% slower than without ccache.
 
-* To enable ccache, edit /etc/ccache.conf and change the line
-'disable = true' to 'disable = false'.
+* To enable ccache, edit the ccache system config file /etc/ccache.conf --
+please change the line 'disable = true' to 'disable = false'.
 
-* To disable distcc, edit /etc/ccache.conf and delete the line
-'prefix_command = /usr/bin/distcc'.
+* To use ccache without distcc, please enable ccache as above, and then disable
+distcc by editing the file /etc/distcc/hosts -- please delete the line that
+contains '127.0.0.1'.
 
 For alternative ways of configuring ccache options, please see 'man ccache',
 section 'CONFIGURATION'.
@@ -78,8 +80,8 @@ chmod ugo-x /etc/profile.d/distcc-masq-client.*
 
 ## distcc-masq-server
 
-This package sets up a 'masquerade mode' distcc server for gcc (including g++,
-objc and gfortran) and clang/clang++.
+This package sets up a 'masquerade mode' distcc server for gcc (including g++
+and objc) and clang/clang++.
 
 If the server and the clients have different versions of Slackware installed,
 you will also need the 'gcc-legacy' package (see below).
@@ -112,15 +114,15 @@ Slackware clients (i486 etc), you don't need to do anything.  Slackware's
 x86_64 gcc and llvm packages already support i486/i586/i686 cross-compilation.
 
 * To cross-compile for Slackware ARM clients, you need to install the
-arm-x-toolchain package on the server (gfortran not supported).
+arm-x-toolchain package on the server.
 
 On i486/i586/i686, the server supports i486/i586/i686 clients, and also arm
-clients if the arm-x-toolchain package is installed (gfortran not supported).
+clients if the arm-x-toolchain package is installed.
 
 On arm, the server supports arm clients. Cross compilation is not supported.
 
 | server | client | support                  |
-|--------|--------|--------------------------|
+|:------:|:------:|:-------------------------|
 | x86_64 | x86_64 | yes                      |
 | x86_64 | i?86   | yes                      |
 | x86_64 | arm    | requires arm-x-toolchain |
@@ -167,7 +169,7 @@ This SlackBuild repackages old versions of the gcc compilers from previous
 versions of Slackware. It is intended to be installed on a distcc server, for
 use by distcc clients running other versions of Slackware.  With this package
 installed, the distcc server will be able to build using the same version of
-gcc (g++/objc/gfortran) as the client.
+gcc/g++ as the client.
 
 By default, the SlackBuild will repackage gcc from Slackware 14.1 and 14.0.
 To specify which Slackware versions should be repackaged, specify the VERSION
