@@ -3,11 +3,9 @@ VERSION="14.1+14.0"
 HOMEPAGE="https://github.com/idlemoor/distcc-tools"
 DOWNLOAD="http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-4.8.2-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-g++-4.8.2-i486-1.txz \
-          http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-gfortran-4.8.2-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-objc-4.8.2-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/d/gcc-4.7.1-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/d/gcc-g++-4.7.1-i486-1.txz \
-          http://mirrors.slackware.com/slackware/slackware-14.0/slackware/d/gcc-gfortran-4.7.1-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/d/gcc-objc-4.7.1-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/l/libmpc-0.8.2-i486-2.txz \
           http://mirrors.slackware.com/slackware/slackware-14.1/slackware/l/mpfr-3.1.2-i486-1.txz \
@@ -16,11 +14,9 @@ DOWNLOAD="http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/l/gmp-5.0.5-i486-1.txz"
 MD5SUM="1f717fd36918e01708a6df7608616ea4 \
         c8ea78ebbfd81335b287ad71699c8fa0 \
-        b54be72be25afe93dc6082c42f7b7d2a \
         7ea9f4aa793c13735f2dcdff0937c718 \
         84cd1756f3c0f6abc906dbb52b47916f \
         8845e5fcd06cb7a7eabcd0be280a6ba7 \
-        07bf3de06cd63661a09168a066556620 \
         8ff027b9094b74e57bb8a58329495473 \
         0bcf9743e5096343ee0f9891f39420e6 \
         6d5d81315dc8a80f463b48157b4a2545 \
@@ -29,11 +25,9 @@ MD5SUM="1f717fd36918e01708a6df7608616ea4 \
         bef5fe18c13c4f89c1e8fce3359e0625"
 DOWNLOAD_x86_64="http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-4.8.2-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-g++-4.8.2-x86_64-1.txz \
-                 http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-gfortran-4.8.2-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-objc-4.8.2-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/d/gcc-4.7.1-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/d/gcc-g++-4.7.1-x86_64-1.txz \
-                 http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/d/gcc-gfortran-4.7.1-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/d/gcc-objc-4.7.1-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/l/libmpc-0.8.2-x86_64-2.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/l/mpfr-3.1.2-x86_64-1.txz \
@@ -42,11 +36,9 @@ DOWNLOAD_x86_64="http://mirrors.slackware.com/slackware/slackware64-14.1/slackwa
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/l/gmp-5.0.5-x86_64-1.txz"
 MD5SUM_x86_64="2cb093fdf5aa5267ffc58b2dd0366c86 \
                f71898400b617cbf84ac1cec4991e897 \
-               13f028f1b5a6e3f4d641124d620e4873 \
                8825104e31b943247b95ce6b4e652fbb \
                d6df24d11396520718cdd036cd4bb812 \
                143b5664b2767e5278e992df067514d2 \
-               491364440c4dbcb89309c34765603949 \
                08703f40678237747487346e3744471e \
                209a663c51726a30eb26cee0c3f0f9e7 \
                92e4d1f245bf739050e59dd02e0957d8 \

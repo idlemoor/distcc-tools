@@ -2,7 +2,7 @@ This SlackBuild repackages old versions of the gcc compilers from previous
 versions of Slackware. It is intended to be installed on a distcc server, for
 use by distcc clients running other versions of Slackware.  With this package
 installed, the distcc server will be able to build using the same version of
-gcc (g++/objc/gfortran) as the client.
+gcc/g++/objc as the client.
 
 By default, the SlackBuild will repackage gcc from Slackware 14.1 and 14.0.
 To specify which Slackware versions should be repackaged, specify the VERSION
