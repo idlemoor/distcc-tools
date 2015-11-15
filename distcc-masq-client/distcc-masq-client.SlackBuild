@@ -24,7 +24,7 @@
 
 PRGNAM=distcc-masq-client
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-6}
+BUILD=${BUILD:-7}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
@@ -47,11 +47,11 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  current)  GCCVERSION=4.9.3
+  current)  GCCVERSION=5.2.0
             ARCH32=i586
             CCACHE=yes
             ;;
-  14.2)     GCCVERSION=4.9.3
+  14.2)     GCCVERSION=5.2.0
             ARCH32=i586
             CCACHE=yes
             ;;
