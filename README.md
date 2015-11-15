@@ -43,8 +43,8 @@ ccache is not enabled by default. It can consume large amounts of storage, and
 one-off compilation (e.g. successfully building a package from SlackBuilds.org)
 is typically 15% slower than without ccache.
 
-* To enable ccache, edit the ccache system config file /etc/ccache.conf --
-please change the line 'disable = true' to 'disable = false'.
+* To enable ccache permanently, please edit the ccache system config file
+/etc/ccache.conf -- change the line 'disable = true' to 'disable = false'.
 
 * To use ccache without distcc, please enable ccache as above, and then disable
 distcc by editing the file /etc/distcc/hosts -- please delete the line that
@@ -53,7 +53,7 @@ contains '127.0.0.1'.
 For alternative ways of configuring ccache options, please see 'man ccache',
 section 'CONFIGURATION'.
 
-#### Disabling distcc and ccache
+#### Disabling and enabling distcc and ccache
 
 To temporarily disable distcc, you can unset the DISTCC_HOSTS environment
 variable.  (This is a change to the upstream behaviour, which would apply the
@@ -70,7 +70,14 @@ variable.
 export CCACHE_DISABLE=true
 ```
 
-To disable distcc-masq-client (both ccache and distcc) completely, you can
+To temporarily enable ccache, you must set the CCACHE_NODISABLE environment
+variable (setting CCACHE_DISABLE to 'false' will not work):
+
+```
+export CCACHE_NODISABLE=true
+```
+
+To disable distcc-masq-client (i.e. both ccache and distcc) completely, you can
 block execution of the system-wide profile script:
 
 ```
@@ -160,7 +167,7 @@ rsync -Pva --delete \
 ```
 
 In this case, the SlackBuild will build a package with a version number of
-'current_yyyymmdd'.
+'current_<date>'.
 
 
 ## gcc-legacy

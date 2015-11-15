@@ -27,8 +27,8 @@ ccache is not enabled by default. It can consume large amounts of storage, and
 one-off compilation (e.g. successfully building a package from SlackBuilds.org)
 is typically 15% slower than without ccache.
 
-* To enable ccache, edit the ccache system config file /etc/ccache.conf --
-please change the line 'disable = true' to 'disable = false'.
+* To enable ccache permanently, please edit the ccache system config file
+/etc/ccache.conf -- change the line 'disable = true' to 'disable = false'.
 
 * To use ccache without distcc, please enable ccache as above, and then disable
 distcc by editing the file /etc/distcc/hosts -- please delete the line that
@@ -51,7 +51,7 @@ variable.
 
   export CCACHE_DISABLE=true
 
-To disable distcc-masq-client (both ccache and distcc) completely, you can
+To disable distcc-masq-client (i.e. both ccache and distcc) completely, you can
 block execution of the system-wide profile script:
 
   chmod ugo-x /etc/profile.d/distcc-masq-client.*
