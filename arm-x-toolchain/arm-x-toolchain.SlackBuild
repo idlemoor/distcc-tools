@@ -25,7 +25,7 @@
 PRGNAM=arm-x-toolchain
 TARNAM=x-toolchain-slk
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-6}
+BUILD=${BUILD:-7}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
