@@ -7,30 +7,36 @@ PIDFILE=/var/run/distccd.pid
 # Start distccd:
 distccd_start() {
   if [ -x /usr/bin/distccd ]; then
-    echo "Starting distcc daemon:  /usr/bin/distccd"
-    if [ -f $LOGFILE ]; then
-      mv $LOGFILE $LOGFILE.1
+    ALLOW="$(sed -e 's/#.*//' -e 's/^/--allow /' /etc/distcc/clients.allow | grep -v '^--allow[[:space:]]*$' )"
+    if [ -n "$ALLOW" ]; then
+      echo "Starting distcc daemon:  /usr/bin/distccd"
+      if [ -f $LOGFILE ]; then
+        mv $LOGFILE $LOGFILE.1
+      fi
+      touch $LOGFILE $PIDFILE
+      chown nobody:nogroup $LOGFILE $PIDFILE
+
+      # Replace the whole path to exclude the masquerade dir if rc.distccd is run manually
+      export PATH=%SERVERLOC%/bin:/usr/sbin:/sbin:/usr/bin:/bin
+      # We don't use /etc/distcc/commands.allow.sh
+      export DISTCC_CMDLIST=/var/cache/distccd/commands.allow
+      mkdir -p $(dirname $DISTCC_CMDLIST)
+      ls -1 %SERVERLOC%/bin > $DISTCC_CMDLIST
+      export DISTCC_CMDLIST_NUMWORDS=1
+
+      /usr/bin/distccd \
+        --verbose \
+        --log-file $LOGFILE \
+        --log-level notice \
+        --jobs 16 \
+        --daemon \
+        --user nobody \
+        --pid-file $PIDFILE \
+        $ALLOW
+
+    else
+      echo "distccd not started -- please edit the file /etc/distcc/clients.allow"
     fi
-    touch $LOGFILE $PIDFILE
-    chown nobody:nogroup $LOGFILE $PIDFILE
-
-    # Replace the whole path to exclude the masquerade dir if rc.distccd is run manually
-    export PATH=%SERVERLOC%/bin:/usr/sbin:/sbin:/usr/bin:/bin
-    # We don't use /etc/distcc/commands.allow.sh
-    export DISTCC_CMDLIST=/var/cache/distccd/commands.allow
-    mkdir -p $(dirname $DISTCC_CMDLIST)
-    ls -1 %SERVERLOC%/bin > $DISTCC_CMDLIST
-    export DISTCC_CMDLIST_NUMWORDS=1
-
-    /usr/bin/distccd \
-      --verbose \
-      --log-file $LOGFILE \
-      --log-level notice \
-      --jobs 16 \
-      --daemon \
-      --user nobody \
-      --pid-file $PIDFILE \
-      $(sed -e 's/#.*//' -e 's/^/--allow /' /etc/distcc/clients.allow | grep -v '^--allow[[:space:]]*$' )
   fi
 }
 
