@@ -5,10 +5,9 @@ client using masquerade mode.  The distcc server should be running either
 Slackware64 (x86_64) or Slackware (i486/i586/i686).
 
 If your client system is running Slackware ARM 14.1, you should install
-arm-x-toolchain version 14.1 on your distcc server.  This is the default.
-Your client system should be fully patched -- that is, it should
-have been updated with the packages gcc-4.8.4-arm-1_slack14.1 and
-gcc-g++-4.8.4-arm-1_slack14.1.
+arm-x-toolchain version 14.1 on your distcc server.  This is the default.  Your
+client system should be fully patched -- that is, it should have been updated
+with the packages gcc-4.8.4-arm-1_slack14.1 and gcc-g++-4.8.4-arm-1_slack14.1.
 
 If your client system is running Slackware ARM -current, you will need to
 rebuild and reinstall arm-x-toolchain on your distcc server whenever your
@@ -21,6 +20,9 @@ the latest version of x-toolchain to the SlackBuild's directory:
 
 In this case, the SlackBuild will build a package with a version number of
 'current_<date>'.
+
+
+References
 
 Slackware ARM's x-toolchain is at
   ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/

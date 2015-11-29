@@ -1,7 +1,7 @@
 This package sets up a 'masquerade mode' distcc client for gcc (including g++
 and objc) and clang/clang++.
 
-With Slackware 14.2, this package also integrates full support for ccache
+With Slackware-current, this package also integrates full support for ccache
 (including ccache without distcc), although ccache is not enabled by default
 (see below).
 
@@ -15,7 +15,7 @@ specification for your servers.  This file sets the system-wide default.
 Or you can configure distcc for a particular user by setting the DISTCC_HOSTS
 environment variable in the user's profile, for example
 
-  export DISTCC_HOSTS="bighost/4 tinyhost"
+  export DISTCC_HOSTS="bigserver/4 tinyserver"
 
 For details of the format of /etc/distcc/hosts and the DISTCC_HOSTS
 environment variable, see 'man distcc', section 'HOST SPECIFICATIONS'.
@@ -25,7 +25,8 @@ Configuring ccache
 
 ccache is not enabled by default. It can consume large amounts of storage, and
 one-off compilation (e.g. successfully building a package from SlackBuilds.org)
-is typically 15% slower than without ccache.
+is typically 15% slower.  You will only benefit from enabling ccache if you
+compile the same source multiple times.
 
 * To enable ccache permanently, please edit the ccache system config file
 /etc/ccache.conf -- change the line 'disable = true' to 'disable = false'.
@@ -46,16 +47,22 @@ system-wide defaults if DISTCC_HOSTS is unset.)
 
   unset DISTCC_HOSTS
 
+To enable distcc temporarily, you can set the DISTCC_HOSTS environment variable.
+
+  export DISTCC_HOSTS='myserver,lzo'
+
 To disable ccache temporarily, you can set the CCACHE_DISABLE environment
 variable.
 
   export CCACHE_DISABLE=true
 
-To enable distcc temporarily, you can set the DISTCC_HOSTS environment variable.
-
-  export DISTCC_HOSTS='myserver,lzo'
-
 To enable ccache temporarily, you can set the CCACHE_NODISABLE environment
 variable.
 
   export CCACHE_NODISABLE=true
+
+
+References
+
+For more information, please see
+  https://github.com/idlemoor/distcc-tools

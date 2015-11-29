@@ -15,5 +15,8 @@ The gcc-legacy package does not conflict with Slackware's own gcc packages.
 
 clang/clang++ legacy versions are not supported.
 
+
+References
+
 For more information, please see
   https://github.com/idlemoor/distcc-tools

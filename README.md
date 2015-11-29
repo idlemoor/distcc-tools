@@ -17,13 +17,13 @@ a Slackware-based distcc "build farm":
 This package sets up a 'masquerade mode' distcc client for gcc (including g++
 and objc) and clang/clang++.
 
-With Slackware 14.2, this package also integrates full support for ccache
+With Slackware-current, this package also integrates full support for ccache
 (including ccache without distcc), although ccache is not enabled by default
 (see below).
 
 #### Configuring distcc
 
-After installing distcc-masq-client, please configure it by editing the file
+**After installing distcc-masq-client, please configure it** by editing the file
 /etc/distcc/hosts -- you should change '127.0.0.1' to the distcc host
 specification for your servers.  This file sets the system-wide default.
 
@@ -31,7 +31,7 @@ Or you can configure distcc for a particular user by setting the DISTCC_HOSTS
 environment variable in the user's profile, for example
 
 ```
-export DISTCC_HOSTS="bighost/4 tinyhost"
+export DISTCC_HOSTS="bigserver/4 tinyserver"
 ```
 
 For details of the format of /etc/distcc/hosts and the DISTCC_HOSTS
@@ -39,9 +39,10 @@ environment variable, see 'man distcc', section 'HOST SPECIFICATIONS'.
 
 #### Configuring ccache
 
-ccache is not enabled by default. It can consume large amounts of storage, and
+**ccache is not enabled by default**. It can consume large amounts of storage, and
 one-off compilation (e.g. successfully building a package from SlackBuilds.org)
-is typically 15% slower than without ccache.
+is typically 15% slower.  You will only benefit from enabling ccache if you
+compile the same source multiple times.
 
 * To enable ccache permanently, please edit the ccache system config file
 /etc/ccache.conf -- change the line 'disable = true' to 'disable = false'.
@@ -55,7 +56,7 @@ section 'CONFIGURATION'.
 
 #### Disabling and enabling distcc and ccache
 
-To disable distcc temporarily, you can unset the DISTCC_HOSTS environment
+**To disable distcc temporarily**, you can unset the DISTCC_HOSTS environment
 variable.  (This is a change to the upstream behaviour, which would apply the
 system-wide defaults if DISTCC_HOSTS is unset.)
 
@@ -63,20 +64,20 @@ system-wide defaults if DISTCC_HOSTS is unset.)
 unset DISTCC_HOSTS
 ```
 
-To disable ccache temporarily, you can set the CCACHE_DISABLE environment
+**To enable distcc temporarily**, you can set the DISTCC_HOSTS environment variable.
+
+```
+export DISTCC_HOSTS='myserver,lzo'
+```
+
+**To disable ccache temporarily**, you can set the CCACHE_DISABLE environment
 variable.
 
 ```
 export CCACHE_DISABLE=true
 ```
 
-To enable distcc temporarily, you can set the DISTCC_HOSTS environment variable.
-
-```
-export DISTCC_HOSTS='myserver,lzo'
-```
-
-To enable ccache temporarily, you can set the CCACHE_NODISABLE environment
+**To enable ccache temporarily**, you can set the CCACHE_NODISABLE environment
 variable.
 
 ```
@@ -92,7 +93,7 @@ and objc) and clang/clang++.
 If the server and the clients have different versions of Slackware installed,
 you will also need the 'gcc-legacy' package (see below).
 
-To start the distccd daemon automatically on boot, you must add these lines in
+**To start the distccd daemon automatically on boot, you must add these lines** in
 /etc/rc.d/rc.local:
 
 ```
@@ -101,7 +102,7 @@ if [ -x /etc/rc.d/rc.distccd ]; then
 fi
 ```
 
-You must also edit the file /etc/distcc/clients.allow to add your networks
+**You must also edit the file /etc/distcc/clients.allow** to add your networks
 and/or hosts that will be allowed to use the server, for example,
 
 ````
@@ -149,10 +150,9 @@ client using masquerade mode.  The distcc server should be running either
 Slackware64 (x86_64) or Slackware (i486/i586/i686).
 
 If your client system is running Slackware ARM 14.1, you should install
-arm-x-toolchain version 14.1 on your distcc server.  This is the default.
-Your client system should be fully patched -- that is, it should
-have been updated with the packages gcc-4.8.4-arm-1_slack14.1 and
-gcc-g++-4.8.4-arm-1_slack14.1.
+arm-x-toolchain version 14.1 on your distcc server.  This is the default.  Your
+client system should be fully patched -- that is, it should have been updated
+with the packages gcc-4.8.4-arm-1_slack14.1 and gcc-g++-4.8.4-arm-1_slack14.1.
 
 If your client system is running Slackware ARM -current, you will need to
 rebuild and reinstall arm-x-toolchain on your distcc server whenever your
@@ -166,7 +166,7 @@ rsync -Pva --delete \
 ```
 
 In this case, the SlackBuild will build a package with a version number of
-'current_<date>'.
+'current_yyyymmdd'.
 
 
 ## gcc-legacy
@@ -189,6 +189,7 @@ VERSION="14.1+14.0" ./gcc-legacy.SlackBuild
 The gcc-legacy package does not conflict with Slackware's own gcc packages.
 
 clang/clang++ legacy versions are not supported.
+
 
 ## Notes
 
@@ -225,3 +226,7 @@ For a full description of 'masquerade mode', see 'man distcc', section
 
 Slackware ARM's x-toolchain can be found at
 ftp://ftp.arm.slackware.com/slackwarearm/slackwarearm-devtools/x-toolchain/
+
+distcc development is now on Github at https://github.com/distcc
+
+ccache development is at https://ccache.samba.org/

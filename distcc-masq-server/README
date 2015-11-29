@@ -49,5 +49,7 @@ On arm, the server supports arm clients. Cross compilation is not supported.
 | arm    | arm    | yes                      |
 
 
+References
+
 For more information, please see
   https://github.com/idlemoor/distcc-tools
