@@ -55,7 +55,7 @@ section 'CONFIGURATION'.
 
 #### Disabling and enabling distcc and ccache
 
-To temporarily disable distcc, you can unset the DISTCC_HOSTS environment
+To disable distcc temporarily, you can unset the DISTCC_HOSTS environment
 variable.  (This is a change to the upstream behaviour, which would apply the
 system-wide defaults if DISTCC_HOSTS is unset.)
 
@@ -63,25 +63,24 @@ system-wide defaults if DISTCC_HOSTS is unset.)
 unset DISTCC_HOSTS
 ```
 
-To temporarily disable ccache, you can set the CCACHE_DISABLE environment
+To disable ccache temporarily, you can set the CCACHE_DISABLE environment
 variable.
 
 ```
 export CCACHE_DISABLE=true
 ```
 
-To temporarily enable ccache, you must set the CCACHE_NODISABLE environment
-variable (setting CCACHE_DISABLE to 'false' will not work):
+To enable distcc temporarily, you can set the DISTCC_HOSTS environment variable.
+
+```
+export DISTCC_HOSTS='myserver,lzo'
+```
+
+To enable ccache temporarily, you can set the CCACHE_NODISABLE environment
+variable.
 
 ```
 export CCACHE_NODISABLE=true
-```
-
-To disable distcc-masq-client (i.e. both ccache and distcc) completely, you can
-block execution of the system-wide profile script:
-
-```
-chmod ugo-x /etc/profile.d/distcc-masq-client.*
 ```
 
 
