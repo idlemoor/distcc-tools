@@ -124,6 +124,13 @@ for COMPILER in gcc g++ ; do
   done
 done
 
+cat $CWD/masq-prevent-recursion.sh > $PKG/$INSTLOC/bin/distcc
+chmod ugo+x $PKG/$INSTLOC/bin/distcc
+if [ "$CCACHE" = 'yes' ]; then
+  cat $CWD/masq-prevent-recursion.sh > $PKG/$INSTLOC/bin/ccache
+  chmod ugo+x $PKG/$INSTLOC/bin/ccache
+fi
+
 if [ "$CCACHE" = 'yes' ]; then
   mkdir -p $PKG/etc
   cat $CWD/ccache.conf.new > $PKG/etc/ccache.conf.new
