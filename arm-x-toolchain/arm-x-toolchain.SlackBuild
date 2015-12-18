@@ -64,8 +64,7 @@ if [ -f $CWD/$TARNAM-$VERSION.tar.xz ]; then
 elif [ -d $CWD/x-toolchain ]; then
   VERSION="current"
   EXTRAVERSION="_$(date -r $CWD/x-toolchain/x-build '+%Y%m%d')"
-  # x-build uses 'i486-slackware-linux' on x86, but eventually we might need this:
-  # [ "$ARCH" = 'i486' ] && ARCH='i586'
+  [ "$ARCH" = 'i486' ] && ARCH='i586'
   rm -rf $TMP/x-toolchain
   cp -a $CWD/x-toolchain $TMP/
 else
@@ -90,9 +89,8 @@ sh ./x-build || exit 1
 
 GCCVERSION=$(${PKG}${INSTLOC}/bin/arm-slackware-linux-gnueabi-gcc --version | head -1 | cut -f3 -d' ')
 
-# Provide a versioned g++.  We need this for when we've forced the version
-# onto g++ and then distcc drops back to rerun locally. We'll copy rather than
-# doing a symlink, because all the others are like that :-)
+# Provide a versioned g++.  The build provides a versioned copy of gcc, but not
+# g++.  We need both of them.  A symlink would be ok, but gcc is a copy, so:
 cp -a \
   $PKG/$INSTLOC/bin/arm-slackware-linux-gnueabi-g++ \
   $PKG/$INSTLOC/bin/arm-slackware-linux-gnueabi-g++-$GCCVERSION
@@ -107,6 +105,17 @@ for CXX in c++ g++ g++-$GCCVERSION; do
     $CWD/arm-g++wrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-$CXX
 done
 chmod ugo+x $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-*
+
+# Horrible bodge for -current, December 2015.
+# slackwarearm-devtools is at 5.3.1, but slackwarearm is at 5.2.1, so ...
+if [ "$VERSION" = "current" ]; then
+  ln -sf \
+    arm-slackware-linux-gnueabi-gcc \
+    $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-gcc-5.2.1
+  ln -sf \
+    arm-slackware-linux-gnueabi-g++ \
+    $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-g++-5.2.1
+fi
 
 # It's almost pump-mode ready, so we won't remove stuff that masq-mode doesn't
 # really need, but the info and man pages are superfluous:

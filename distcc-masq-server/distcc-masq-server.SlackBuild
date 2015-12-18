@@ -47,10 +47,11 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  current)  GCCVERSION=5.2.0
+  14.2)     GCCVERSION=5.3.0
             ARCH32=i586
             ;;
-  14.2)     GCCVERSION=5.2.0
+  current)  GCCVERSION=5.3.0
+            [ "$ARCH" = "arm" ] && GCCVERSION=5.2.1
             ARCH32=i586
             ;;
   14.1)     GCCVERSION=4.8.2
