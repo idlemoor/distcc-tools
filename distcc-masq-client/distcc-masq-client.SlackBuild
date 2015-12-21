@@ -24,7 +24,7 @@
 
 PRGNAM=distcc-masq-client
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-7}
+BUILD=${BUILD:-8}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
