@@ -24,7 +24,7 @@
 
 PRGNAM=gcc-legacy
 VERSION=${VERSION:-14.1+14.0}
-BUILD=${BUILD:-7}
+BUILD=${BUILD:-8}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
@@ -57,7 +57,7 @@ for V in $(echo $VERSION | tr '+' ' '); do
   14.2|current)
     [ "$ARCH" = "x86_64" ] && GCCPKGLIST="gcc-5.3.0-x86_64-1.txz gcc-g++-5.3.0-x86_64-1.txz gcc-objc-5.3.0-x86_64-1.txz"
     [ "$ARCH" = "i486"   ] && GCCPKGLIST="gcc-5.3.0-i586-1.txz   gcc-g++-5.3.0-i586-1.txz   gcc-objc-5.3.0-i586-1.txz"
-    [ "$ARCH" = "arm"    ] && GCCPKGLIST="gcc-5.2.1-arm-1.txz    gcc-g++-5.2.1-arm-1.txz    gcc-objc-5.2.1-arm-1.txz"
+    [ "$ARCH" = "arm"    ] && GCCPKGLIST="gcc-5.3.1-arm-1.txz    gcc-g++-5.3.1-arm-1.txz    gcc-objc-5.3.1-arm-1.txz"
     ARCH32="i586"
     [ "$ARCH" = "x86_64" ] && LIBPKGLIST="libmpc-1.0.3-x86_64-1.txz mpfr-3.1.3-x86_64-1.txz gmp-6.1.0-x86_64-1.txz"
     [ "$ARCH" = "i486"   ] && LIBPKGLIST="libmpc-1.0.3-i586-1.txz   mpfr-3.1.3-i586-1.txz   gmp-6.1.0-i486-1.txz"
