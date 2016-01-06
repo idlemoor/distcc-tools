@@ -48,11 +48,13 @@ mkdir -p $PKG $OUTPUT
 
 case $VERSION in
   14.2)     GCCVERSION=5.3.0
+            CLANGVERSION=3.7
             ARCH32=i586
             CCACHE=yes
             ;;
   current)  GCCVERSION=5.3.0
             [ "$ARCH" = "arm" ] && GCCVERSION=5.2.1
+            CLANGVERSION=3.7
             ARCH32=i586
             CCACHE=yes
             ;;
@@ -73,14 +75,23 @@ esac
 # Fixup ARCH for 14.2+
 [ "$ARCH" = 'i486' ] && ARCH="$ARCH32"
 
-# Provide a symlink that's missing from the gcc SlackBuild.  We need this for
-# when we've forced the version onto g++ and then distcc drops back to rerun locally.
 mkdir -p $PKG/usr/bin
-ln -sf g++-gcc-$GCCVERSION $PKG/usr/bin/$ARCH-slackware-linux$SLKABI-g++-$GCCVERSION
-
 mkdir -p $PKG/$INSTLOC/bin
 
-for COMPILER in clang clang++ ; do
+# (1) clang
+
+CLANGBINS="clang clang++"
+if [ -n "$CLANGVERSION" ]; then
+  # clang didn't have a versioned name until -3.7 ...
+  CLANGBINS="$CLANGBINS clang-$CLANGVERSION"
+  # ... and it doesn't have an arch-specific versioned name, so we'll provide it:
+  ln -sf \
+    clang-$CLANGVERSION \
+    $PKG/usr/bin/$ARCH-slackware-linux-clang-$CLANGVERSION
+  # I'm ignoring /usr/bin/clang-3.7-32 until something actually wants it ;)
+fi
+
+for COMPILER in $CLANGBINS ; do
   TEMPLATE=masq-clang-template.sh
   [ "$CCACHE" = 'yes' ] && TEMPLATE=masq-clang-ccache-template.sh
   sed \
@@ -105,6 +116,12 @@ for COMPILER in clang clang++ ; do
   fi
 done
 
+# (2) gcc
+
+# Provide a symlink that's missing from the gcc SlackBuild.  We need this for
+# when we've forced the version onto g++ and then distcc drops back to rerun locally.
+ln -sf g++-gcc-$GCCVERSION $PKG/usr/bin/$ARCH-slackware-linux$SLKABI-g++-$GCCVERSION
+
 for COMPILER in gcc g++ ; do
   TEMPLATE=masq-gcc-template.sh
   [ "$CCACHE" = 'yes' ] && TEMPLATE=masq-gcc-ccache-template.sh
@@ -124,6 +141,8 @@ for COMPILER in gcc g++ ; do
       $PKG/$INSTLOC/bin/$synonym
   done
 done
+
+# (3) everything else
 
 cat $CWD/masq-prevent-recursion.sh > $PKG/$INSTLOC/bin/distcc
 chmod ugo+x $PKG/$INSTLOC/bin/distcc
