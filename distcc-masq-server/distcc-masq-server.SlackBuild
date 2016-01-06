@@ -24,7 +24,7 @@
 
 PRGNAM=distcc-masq-server
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-7}
+BUILD=${BUILD:-8}
 TAG=${TAG:-_SBo}
 
 SERVERLOC=${SERVERLOC:-/opt/$PRGNAM}
@@ -48,10 +48,12 @@ mkdir -p $PKG $OUTPUT
 
 case $VERSION in
   14.2)     GCCVERSION=5.3.0
+            CLANGVERSION=3.7
             ARCH32=i586
             ;;
   current)  GCCVERSION=5.3.0
             [ "$ARCH" = "arm" ] && GCCVERSION=5.2.1
+            CLANGVERSION=3.7
             ARCH32=i586
             ;;
   14.1)     GCCVERSION=4.8.2
@@ -73,10 +75,27 @@ esac
 
 mkdir -p $PKG/$SERVERLOC/bin
 
-for COMPILER in clang clang++ ; do
+# (1) clang
+
+CLANGBINS="clang clang++"
+# clang didn't have a versioned binary until -3.7
+[ -n "$CLANGVERSION" ] && CLANGBINS="$CLANGBINS clang-$CLANGVERSION"
+
+for COMPILER in $CLANGBINS ; do
   ln -s /usr/bin/${ARCH}-slackware-linux-${COMPILER} ${PKG}/${SERVERLOC}/bin/
   ln -s /usr/bin/${COMPILER} ${PKG}/${SERVERLOC}/bin/
 done
+
+if [ "$ARCH" = 'x86_64' ]; then
+  # Provide stubs-32.h (clang needs it to cross-compile arm & i?86)
+  # (note, this file is also provided by the multilib glibc package)
+  mkdir -p $PKG/usr/include/gnu/
+  cp -a \
+    $CWD/stubs-32.h \
+    $PKG/usr/include/gnu/
+fi
+
+# (2) gcc
 
 for COMPILER in gcc gcc-${GCCVERSION} c++ g++ ; do
   ln -s /usr/bin/${ARCH}-slackware-linux${SLKABI}-${COMPILER} ${PKG}/${SERVERLOC}/bin/
@@ -91,26 +110,20 @@ for COMPILER in gcc gcc-${GCCVERSION} c++ g++ ; do
   fi
 done
 
-# $ARCH-slackware-linux-g++-$GCCVERSION is strangely omitted from /usr/bin,
+# $ARCH-slackware-linux-g++-$GCCVERSION isn't provided by the Slackware package,
 # so we need to link from the unversioned g++ in /usr/bin.
 ln -s \
   /usr/bin/${ARCH}-slackware-linux${SLKABI}-g++ \
   ${PKG}/${SERVERLOC}/bin/${ARCH}-slackware-linux${SLKABI}-g++-${GCCVERSION}
+
 if [ "$ARCH" = 'x86_64' ]; then
-  # We can just copy the unversioned wrapper.
+  # also provide 32 bit :) we can just copy the unversioned wrapper.
   cp -a \
     ${PKG}/${SERVERLOC}/bin/${ARCH32}-slackware-linux${SLKABI}-g++ \
     ${PKG}/${SERVERLOC}/bin/${ARCH32}-slackware-linux${SLKABI}-g++-${GCCVERSION}
 fi
 
-# On x86_64 only, provide stubs-32.h (clang needs it to cross-compile arm & i?86)
-# (note, this file is also provided by the multilib glibc package)
-if [ "$ARCH" = 'x86_64' ]; then
-  mkdir -p $PKG/usr/include/gnu/
-  cp -a \
-    $CWD/stubs-32.h \
-    $PKG/usr/include/gnu/
-fi
+# (3) everything else
 
 mkdir -p $PKG/etc/rc.d
 cp -a \
