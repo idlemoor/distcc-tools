@@ -48,13 +48,16 @@ mkdir -p $PKG $OUTPUT
 
 case $VERSION in
   14.2)     GCCVERSION=5.3.0
-            CLANGVERSION=3.7
+            [ "$ARCH" = "arm" ] && GCCVERSION=5.3.1
+            CLANGVERSION=3.8
+            [ "$ARCH" = "arm" ] && CLANGVERSION=3.7
             ARCH32=i586
             CCACHE=yes
             ;;
   current)  GCCVERSION=5.3.0
-            [ "$ARCH" = "arm" ] && GCCVERSION=5.2.1
-            CLANGVERSION=3.7
+            [ "$ARCH" = "arm" ] && GCCVERSION=5.3.1
+            CLANGVERSION=3.8
+            [ "$ARCH" = "arm" ] && CLANGVERSION=3.7
             ARCH32=i586
             CCACHE=yes
             ;;

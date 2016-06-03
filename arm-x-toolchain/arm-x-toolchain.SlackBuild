@@ -25,7 +25,7 @@
 PRGNAM=arm-x-toolchain
 TARNAM=x-toolchain-slk
 VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-7}
+BUILD=${BUILD:-8}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
@@ -105,17 +105,6 @@ for CXX in c++ g++ g++-$GCCVERSION; do
     $CWD/arm-g++wrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-$CXX
 done
 chmod ugo+x $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-*
-
-# Horrible bodge for -current, December 2015.
-# slackwarearm-devtools is at 5.3.1, but slackwarearm is at 5.2.1, so ...
-if [ "$VERSION" = "current" ]; then
-  ln -sf \
-    arm-slackware-linux-gnueabi-gcc \
-    $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-gcc-5.2.1
-  ln -sf \
-    arm-slackware-linux-gnueabi-g++ \
-    $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-g++-5.2.1
-fi
 
 # It's almost pump-mode ready, so we won't remove stuff that masq-mode doesn't
 # really need, but the info and man pages are superfluous:
