@@ -23,15 +23,15 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=distcc-masq-server
-VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-8}
+VERSION=${VERSION:-14.2}
+BUILD=${BUILD:-9}
 TAG=${TAG:-_SBo}
 
 SERVERLOC=${SERVERLOC:-/opt/$PRGNAM}
 
 SLKABI=''
 case "${ARCH:=$(uname -m)}" in
-  i?86) ARCH=i486 ;;
+  i?86) ARCH=i586 ;;
   arm*) ARCH=arm ; SLKABI="-gnueabi" ;;
      *) : ;;
 esac
@@ -47,13 +47,12 @@ rm -rf $PKG
 mkdir -p $PKG $OUTPUT
 
 case $VERSION in
-  14.2)     GCCVERSION=5.3.0
-            [ "$ARCH" = "arm" ] && GCCVERSION=5.3.1
-            CLANGVERSION=3.8
-            [ "$ARCH" = "arm" ] && CLANGVERSION=3.7
+  current)  GCCVERSION=7.1.0
+            CLANGVERSION=4.0
             ARCH32=i586
+            CCACHE=yes
             ;;
-  current)  GCCVERSION=5.3.0
+  14.2)     GCCVERSION=5.3.0
             [ "$ARCH" = "arm" ] && GCCVERSION=5.3.1
             CLANGVERSION=3.8
             [ "$ARCH" = "arm" ] && CLANGVERSION=3.7

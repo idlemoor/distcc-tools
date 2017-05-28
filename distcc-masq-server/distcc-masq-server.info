@@ -1,5 +1,5 @@
 PRGNAM="distcc-masq-server"
-VERSION="14.1"
+VERSION="14.2"
 HOMEPAGE="https://github.com/idlemoor/distcc-tools"
 DOWNLOAD=""
 MD5SUM=""
