@@ -1,45 +1,69 @@
 PRGNAM="gcc-legacy"
 VERSION="14.1+14.0"
 HOMEPAGE="https://github.com/idlemoor/distcc-tools"
-DOWNLOAD="http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-4.8.2-i486-1.txz \
+DOWNLOAD="http://mirrors.slackware.com/slackware/slackware-14.2/slackware/d/gcc-5.3.0-i586-3.txz \
+          http://mirrors.slackware.com/slackware/slackware-14.2/slackware/d/gcc-g++-5.3.0-i586-3.txz \
+          http://mirrors.slackware.com/slackware/slackware-14.2/slackware/d/gcc-objc-5.3.0-i586-3.txz \
+          http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-4.8.2-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-g++-4.8.2-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.1/slackware/d/gcc-objc-4.8.2-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/d/gcc-4.7.1-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/d/gcc-g++-4.7.1-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/d/gcc-objc-4.7.1-i486-1.txz \
+          http://mirrors.slackware.com/slackware/slackware-14.2/slackware/l/libmpc-1.0.3-i486-1.txz \
+          http://mirrors.slackware.com/slackware/slackware-14.2/slackware/l/mpfr-3.1.4-i586-1.txz \
+          http://mirrors.slackware.com/slackware/slackware-14.2/slackware/l/gmp-6.1.1-i586-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/l/libmpc-0.8.2-i486-2.txz \
           http://mirrors.slackware.com/slackware/slackware-14.1/slackware/l/mpfr-3.1.2-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.1/slackware/l/gmp-5.1.3-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/l/mpfr-3.1.0-i486-1.txz \
           http://mirrors.slackware.com/slackware/slackware-14.0/slackware/l/gmp-5.0.5-i486-1.txz"
-MD5SUM="1f717fd36918e01708a6df7608616ea4 \
+MD5SUM="ad6b4a13cfc2a4587c656f2c7f9a7153 \
+        ece8bac8801b35b88e136e09eaa16581 \
+        2e153f2ef4485cd725257de914b9f38d \
+        1f717fd36918e01708a6df7608616ea4 \
         c8ea78ebbfd81335b287ad71699c8fa0 \
         7ea9f4aa793c13735f2dcdff0937c718 \
         84cd1756f3c0f6abc906dbb52b47916f \
         8845e5fcd06cb7a7eabcd0be280a6ba7 \
         8ff027b9094b74e57bb8a58329495473 \
+        029858a013a18682aee422886fdc339f \
+        58bc117a36159ee651b4458a5ef1debf \
+        86ca367fa041789f4325c1c7d9d972a9 \
         0bcf9743e5096343ee0f9891f39420e6 \
         6d5d81315dc8a80f463b48157b4a2545 \
         45e3c84ec2d526df366484b9c442294a \
         705c61cd9a1e56e7d2355506b586135d \
         bef5fe18c13c4f89c1e8fce3359e0625"
-DOWNLOAD_x86_64="http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-4.8.2-x86_64-1.txz \
+DOWNLOAD_x86_64="http://mirrors.slackware.com/slackware/slackware64-14.2/slackware64/d/gcc-5.3.0-x86_64-3.txz \
+                 http://mirrors.slackware.com/slackware/slackware64-14.2/slackware64/d/gcc-g++-5.3.0-x86_64-3.txz \
+                 http://mirrors.slackware.com/slackware/slackware64-14.2/slackware64/d/gcc-objc-5.3.0-x86_64-3.txz \
+                 http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-4.8.2-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-g++-4.8.2-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/d/gcc-objc-4.8.2-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/d/gcc-4.7.1-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/d/gcc-g++-4.7.1-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/d/gcc-objc-4.7.1-x86_64-1.txz \
+                 http://mirrors.slackware.com/slackware/slackware64-14.2/slackware64/l/libmpc-1.0.3-x86_64-1.txz \
+                 http://mirrors.slackware.com/slackware/slackware64-14.2/slackware64/l/mpfr-3.1.4-x86_64-1.txz \
+                 http://mirrors.slackware.com/slackware/slackware64-14.2/slackware64/l/gmp-6.1.1-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/l/libmpc-0.8.2-x86_64-2.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/l/mpfr-3.1.2-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.1/slackware64/l/gmp-5.1.3-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/l/mpfr-3.1.0-x86_64-1.txz \
                  http://mirrors.slackware.com/slackware/slackware64-14.0/slackware64/l/gmp-5.0.5-x86_64-1.txz"
-MD5SUM_x86_64="2cb093fdf5aa5267ffc58b2dd0366c86 \
+MD5SUM_x86_64="2d82b41e7c037d9c272a0f161e2b14ee \
+               a1ca0afac5ed7b2f2725136a7e84db65 \
+               e1f5006d524354aed5398389aa5484bf \
+               2cb093fdf5aa5267ffc58b2dd0366c86 \
                f71898400b617cbf84ac1cec4991e897 \
                8825104e31b943247b95ce6b4e652fbb \
                d6df24d11396520718cdd036cd4bb812 \
                143b5664b2767e5278e992df067514d2 \
                08703f40678237747487346e3744471e \
+               374c71d79ce2521cdac76443e702fdbb \
+               4ae44442d47068ef2a2ba90eb95ca632 \
+               09f075056d66a04e33d7b1d90db57e85 \
                209a663c51726a30eb26cee0c3f0f9e7 \
                92e4d1f245bf739050e59dd02e0957d8 \
                893dd1ee36e860e9fdc69b674d2c16b2 \
