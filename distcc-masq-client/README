@@ -1,9 +1,8 @@
 This package sets up a 'masquerade mode' distcc client for gcc (including g++
 and objc) and clang/clang++.
 
-With Slackware-current, this package also integrates full support for ccache
-(including ccache without distcc), although ccache is not enabled by default
-(see below).
+This package also integrates full support for ccache (including ccache
+without distcc), although ccache is not enabled by default (see below).
 
 
 Configuring distcc
