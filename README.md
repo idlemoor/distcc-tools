@@ -17,9 +17,8 @@ a Slackware-based distcc "build farm":
 This package sets up a 'masquerade mode' distcc client for gcc (including g++
 and objc) and clang/clang++.
 
-With Slackware-current, this package also integrates full support for ccache
-(including ccache without distcc), although ccache is not enabled by default
-(see below).
+This package also integrates full support for ccache (including ccache
+without distcc), although ccache is not enabled by default (see below).
 
 #### Configuring distcc
 
@@ -149,15 +148,19 @@ intended to be installed on a distcc server, and called from a Slackware ARM
 client using masquerade mode.  The distcc server should be running either
 Slackware64 (x86_64) or Slackware (i486/i586/i686).
 
-If your client system is running Slackware ARM 14.1, you should install
-arm-x-toolchain version 14.1 on your distcc server.  This is the default.  Your
-client system should be fully patched -- that is, it should have been updated
-with the packages gcc-4.8.4-arm-1_slack14.1 and gcc-g++-4.8.4-arm-1_slack14.1.
+If your client system is running Slackware ARM 14.2, you should install
+arm-x-toolchain version 14.2 on your distcc server. This is the default.
 
-If your client system is running Slackware ARM 14.2-RC or -current, you will
-need to rebuild and reinstall arm-x-toolchain on your distcc server whenever
-your client system's gcc packages are updated. You must use rsync to download
-the latest version of x-toolchain to the SlackBuild's directory:
+If your client system is running Slackware ARM 14.1, you should install
+arm-x-toolchain version 14.1 on your distcc server. Your client system
+should be fully patched -- that is, it should have been updated with the
+packages gcc-4.8.4-arm-1_slack14.1 and gcc-g++-4.8.4-arm-1_slack14.1.
+
+If your client system is running Slackware ARM -current, you will need
+to rebuild and reinstall arm-x-toolchain on your distcc server whenever
+your client system's gcc packages are updated. You must use rsync to
+download the latest version of x-toolchain to the SlackBuild's
+directory:
 
 ```
 rsync -Pva --delete \
@@ -177,18 +180,18 @@ use by distcc clients running other versions of Slackware.  With this package
 installed, the distcc server will be able to build using the same version of
 gcc/g++ as the client.
 
+The gcc-legacy package does not conflict with Slackware's own gcc packages.
+clang/clang++ legacy versions are not supported.
+
 By default, the SlackBuild will repackage gcc from Slackware 14.1 and 14.0.
 To specify which Slackware versions should be repackaged, specify the VERSION
-environment variable when running the SlackBuild.  Multiple Slackware versions
-should be separated by '+', for example
+environment variable when running the SlackBuild. If your distcc server is
+running Slackware-current, you can use VERSION="14.2". Multiple Slackware
+versions should be separated by '+', for example
 
 ```
 VERSION="14.1+14.0" ./gcc-legacy.SlackBuild
 ```
-
-The gcc-legacy package does not conflict with Slackware's own gcc packages.
-
-clang/clang++ legacy versions are not supported.
 
 
 ## Notes
