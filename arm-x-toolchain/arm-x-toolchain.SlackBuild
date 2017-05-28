@@ -24,15 +24,16 @@
 
 PRGNAM=arm-x-toolchain
 TARNAM=x-toolchain-slk
-VERSION=${VERSION:-14.1}
-BUILD=${BUILD:-8}
+VERSION=${VERSION:-14.2}
+TARVER=14.1  # yes, really
+BUILD=${BUILD:-9}
 TAG=${TAG:-_SBo}
 
 INSTLOC=${INSTLOC:-/opt/$PRGNAM}
 SERVERLOC=${SERVERLOC:-/opt/distcc-masq-server}
 
 case "${ARCH:=$(uname -m)}" in
-  i?86) ARCH=i486 ;;
+  i?86) ARCH=i586 ;;
   arm*) echo "Cross compilation for arm on $ARCH is not supported." ; exit 1 ;;
      *) : ;;
 esac
@@ -50,11 +51,15 @@ cd $TMP
 
 if [ -f $CWD/$TARNAM-$VERSION.tar.xz ]; then
   EXTRAVERSION=""
-  rm -rf $TARNAM-$VERSION
-  tar xvf $CWD/$TARNAM-$VERSION.tar.xz
-  cd $TARNAM-$VERSION
-  if [ "$VERSION" = 14.1 ];then
-    # need to cope with the upgrade to gcc-4.8.4
+  rm -rf $TARNAM-$TARVER
+  tar xvf $CWD/$TARNAM-$TARVER.tar.xz
+  cd $TARNAM-$TARVER
+  if [ "$VERSION" = 14.1 ]; then
+    # Historical note:
+    # To cope with 14.1's patch upgrade to gcc-4.8.4 you will need to download:
+    # https://sourceforge.net/projects/slackbuildsdirectlinks/files/arm-x-toolchain/gcc-4.8.4.tar.xz
+    # https://sourceforge.net/projects/slackbuildsdirectlinks/files/arm-x-toolchain/patches-gcc-4.8_4.8.4-1.tar.xz
+    # http://slackware.uk/slackwarearm/slackwarearm-devtools/x-toolchain_oldversions/x-toolchain-slk-pre14.2-gcc-4.8.4.tar.xz
     cp \
       $CWD/gcc-4.8.4.tar.xz \
       $CWD/patches-gcc-4.8_4.8.4-1.tar.xz \
@@ -81,9 +86,7 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-sed -i \
-  -e "s#^INSTLOC=.*#INSTLOC=${PKG}${INSTLOC}#" \
-  x-build
+sed -i -e "s#^INSTLOC=.*#INSTLOC=${PKG}${INSTLOC}#" x-build
 
 sh ./x-build || exit 1
 
