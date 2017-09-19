@@ -54,6 +54,7 @@ cd $TMP
 
 if [ -f $CWD/$TARNAM-$TARVER.tar.xz ]; then
   EXTRAVERSION=""
+  GNUEABI='gnueabi'
   rm -rf $TARNAM-$TARVER
   tar xvf $CWD/$TARNAM-$TARVER.tar.xz
   cd $TARNAM-$TARVER
@@ -72,6 +73,7 @@ if [ -f $CWD/$TARNAM-$TARVER.tar.xz ]; then
 elif [ -d $CWD/x-toolchain ]; then
   VERSION="current"
   EXTRAVERSION="_$(date -r $CWD/x-toolchain/x-build '+%Y%m%d')"
+  GNUEABI='gnueabihf'
   [ "$ARCH" = 'i486' ] && ARCH='i586'
   rm -rf $TMP/x-toolchain
   cp -a $CWD/x-toolchain $TMP/
@@ -92,24 +94,24 @@ sed -i -e "s#^INSTLOC=.*#INSTLOC=${PKG}${INSTLOC}#" x-build
 
 sh ./x-build || exit 1
 
-GCCVERSION=$(${PKG}${INSTLOC}/bin/arm-slackware-linux-gnueabi-gcc --version | head -1 | cut -f3 -d' ')
+GCCVERSION=$(${PKG}${INSTLOC}/bin/arm-slackware-linux-${GNUEABI}-gcc --version | head -1 | cut -f3 -d' ')
 
 # Provide a versioned g++.  The build provides a versioned copy of gcc, but not
 # g++.  We need both of them.  A symlink would be ok, but gcc is a copy, so:
 cp -a \
-  $PKG/$INSTLOC/bin/arm-slackware-linux-gnueabi-g++ \
-  $PKG/$INSTLOC/bin/arm-slackware-linux-gnueabi-g++-$GCCVERSION
+  $PKG/$INSTLOC/bin/arm-slackware-linux-$GNUEABI-g++ \
+  $PKG/$INSTLOC/bin/arm-slackware-linux-$GNUEABI-g++-$GCCVERSION
 
 mkdir -p $PKG/$SERVERLOC/bin
 for CC in gcc gcc-$GCCVERSION ; do
-  sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" \
-    $CWD/arm-gccwrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-$CC
+  sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" -e "s~%GNUEABI%~$GNUEABI~" \
+    $CWD/arm-gccwrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-$GNUEABI-$CC
 done
 for CXX in c++ g++ g++-$GCCVERSION; do
-  sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" \
-    $CWD/arm-g++wrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-$CXX
+  sed -e "s/%ARCH%/$ARCH/" -e "s~%INSTLOC%~$INSTLOC~" -e "s~%GNUEABI%~$GNUEABI~" \
+    $CWD/arm-g++wrapper.sh > $PKG/$SERVERLOC/bin/arm-slackware-linux-$GNUEABI-$CXX
 done
-chmod ugo+x $PKG/$SERVERLOC/bin/arm-slackware-linux-gnueabi-*
+chmod ugo+x $PKG/$SERVERLOC/bin/arm-slackware-linux-$GNUEABI-*
 
 # It's almost pump-mode ready, so we won't remove stuff that masq-mode doesn't
 # really need, but the info and man pages are superfluous:

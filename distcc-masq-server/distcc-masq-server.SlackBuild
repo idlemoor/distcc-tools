@@ -50,7 +50,7 @@ case $VERSION in
   current)  GCCVERSION=7.1.0
             CLANGVERSION=4.0
             ARCH32=i586
-            CCACHE=yes
+            [ "$ARCH" = "arm" ] && SLKABI="-gnueabihf"
             ;;
   14.2)     GCCVERSION=5.3.0
             [ "$ARCH" = "arm" ] && GCCVERSION=5.3.1

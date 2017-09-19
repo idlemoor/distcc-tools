@@ -61,6 +61,7 @@ for V in $(echo $VERSION | tr '+' ' '); do
     [ "$ARCH" = "x86_64" ] && LIBPKGLIST="libmpc-1.0.3-x86_64-1.txz mpfr-3.1.5-x86_64-1.txz gmp-6.1.1-x86_64-1.txz"
     [ "$ARCH" = "i486"   ] && LIBPKGLIST="libmpc-1.0.3-i486-1.txz   mpfr-3.1.5-i586-1.txz   gmp-6.1.1-i586-1.txz"
     [ "$ARCH" = "arm"    ] && LIBPKGLIST="libmpc-1.0.3-arm-1.txz    mpfr-3.1.5-arm-1.txz    gmp-6.1.1-arm-1.txz"
+    [ "$ARCH" = "arm"    ] && SLKABI="-gnueabihf"
     ARCH32="i586"
     ;;
   14.2)
